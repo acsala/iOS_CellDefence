@@ -22,3 +22,6 @@ Technologies implemented:
 <ul><i>
 <li>iOS</li>
 </ul>
+
+Mockup:
+<img src="/doc/Mockup.jpg" alt="Mockup">
