@@ -41,48 +41,48 @@ placed in a model. These models will communicate with the view through viewcontr
 <li>Microbe</li>
 <li>Level</li>
 <li>Object</li>
-<ul>
+</ul>
 
 Sotryboard
 <ul>
 <li>Contains the view for main menu, settings and gameplay</li>
-<ul>
+</ul>
 
 MainViewController
 <ul>
 <li>View controller for main menu, segue to settings and gameplay</li>
-<ul>
+</ul>
 
 GameViewController
 <ul>
 <li>Envokes MyScreen, which is a Sprite Kit class, methodes for starting a game</li>
-<ul>
+</ul>
 
 MyScreen
 <ul>
 <li>Sprite Kit class, it will make properties of models Microbe and Level as sprites, take care of the physics and animation
 of the game</li>
-<ul>
+</ul>
 
 GamePlay
 <ul>
 <li>Class for GamePlay, has methodes to start a new game, keeping track of the score, logic for ending the game</li>
-<ul>
+</ul>
 
 Microbe
 <ul>
 <li>Class for the player and the opponents, methodes for moving, shooting, keeping track of the position etc</li>
-<ul>
+</ul>
 
 Level
 <ul>
 <li>Class for Levels, represents the map on methodes in it to build up a level from objects</li>
-<ul>
+</ul>
 
 Object
 <ul>
 <li>Class for Objects that can be placed on the map</li>
-<ul>
+</ul>
 
 # Style guide
 
