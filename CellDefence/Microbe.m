@@ -25,6 +25,9 @@
         node.position = position;
         node.name  = [NSString stringWithFormat:@"%@", name];
         
+        node.physicsBody = [SKPhysicsBody bodyWithCircleOfRadius:node.size.width * 0.5];
+        node.physicsBody.affectedByGravity = NO;
+        
     }
     
     return self;
