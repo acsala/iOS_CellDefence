@@ -1,5 +1,5 @@
 //
-//  Microbe.h
+//  Object.h
 //  CellDefence
 //
 //  Created by Attila Csala on 12/9/13.
@@ -8,10 +8,10 @@
 
 #import <SpriteKit/SpriteKit.h>
 
-@interface Microbe : SKSpriteNode
+@interface Object : SKSpriteNode
 
 // create initialization method for microbe with position and size
--(Microbe*) initWithPosition:(CGPoint)position
+-(Object*) initWithPosition:(CGPoint)position
              withPictureName:(NSString*)pictureName
                withAnimation:(NSString*)animationPictureName
                     withName:(NSString*)name

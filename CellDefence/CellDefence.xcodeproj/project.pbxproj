@@ -17,7 +17,6 @@
 		EB46C8031855F94400A935AA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EB46C8011855F94400A935AA /* Main.storyboard */; };
 		EB46C8061855F94400A935AA /* GameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EB46C8051855F94400A935AA /* GameViewController.m */; };
 		EB46C8091855F94400A935AA /* MyScene.m in Sources */ = {isa = PBXBuildFile; fileRef = EB46C8081855F94400A935AA /* MyScene.m */; };
-		EB46C80B1855F94400A935AA /* Spaceship.png in Resources */ = {isa = PBXBuildFile; fileRef = EB46C80A1855F94400A935AA /* Spaceship.png */; };
 		EB46C80D1855F94400A935AA /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EB46C80C1855F94400A935AA /* Images.xcassets */; };
 		EB46C8141855F94400A935AA /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EB46C8131855F94400A935AA /* XCTest.framework */; };
 		EB46C8151855F94400A935AA /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EB46C7ED1855F94400A935AA /* Foundation.framework */; };
@@ -25,6 +24,17 @@
 		EB46C81E1855F94400A935AA /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = EB46C81C1855F94400A935AA /* InfoPlist.strings */; };
 		EB46C8201855F94400A935AA /* CellDefenceTests.m in Sources */ = {isa = PBXBuildFile; fileRef = EB46C81F1855F94400A935AA /* CellDefenceTests.m */; };
 		EB46C82B185600AC00A935AA /* Microbe.m in Sources */ = {isa = PBXBuildFile; fileRef = EB46C82A185600AC00A935AA /* Microbe.m */; };
+		EB46C8371856358900A935AA /* virus1.png in Resources */ = {isa = PBXBuildFile; fileRef = EB46C8351856358900A935AA /* virus1.png */; };
+		EB46C8381856358900A935AA /* virus2.png in Resources */ = {isa = PBXBuildFile; fileRef = EB46C8361856358900A935AA /* virus2.png */; };
+		EB46C83F1856377700A935AA /* player1.png in Resources */ = {isa = PBXBuildFile; fileRef = EB46C83D1856377700A935AA /* player1.png */; };
+		EB46C8401856377700A935AA /* player2.png in Resources */ = {isa = PBXBuildFile; fileRef = EB46C83E1856377700A935AA /* player2.png */; };
+		EB46C8481856482A00A935AA /* barrier1.png in Resources */ = {isa = PBXBuildFile; fileRef = EB46C8471856482A00A935AA /* barrier1.png */; };
+		EB46C84E1856483000A935AA /* barrier2.png in Resources */ = {isa = PBXBuildFile; fileRef = EB46C8491856483000A935AA /* barrier2.png */; };
+		EB46C84F1856483000A935AA /* barrier3.png in Resources */ = {isa = PBXBuildFile; fileRef = EB46C84A1856483000A935AA /* barrier3.png */; };
+		EB46C8501856483000A935AA /* barrier4.png in Resources */ = {isa = PBXBuildFile; fileRef = EB46C84B1856483000A935AA /* barrier4.png */; };
+		EB46C8511856483000A935AA /* barrier5.png in Resources */ = {isa = PBXBuildFile; fileRef = EB46C84C1856483000A935AA /* barrier5.png */; };
+		EB46C8521856483000A935AA /* barrier6.png in Resources */ = {isa = PBXBuildFile; fileRef = EB46C84D1856483000A935AA /* barrier6.png */; };
+		EB46C855185648DB00A935AA /* Object.m in Sources */ = {isa = PBXBuildFile; fileRef = EB46C854185648DB00A935AA /* Object.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -54,7 +64,6 @@
 		EB46C8051855F94400A935AA /* GameViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GameViewController.m; sourceTree = "<group>"; };
 		EB46C8071855F94400A935AA /* MyScene.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MyScene.h; sourceTree = "<group>"; };
 		EB46C8081855F94400A935AA /* MyScene.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MyScene.m; sourceTree = "<group>"; };
-		EB46C80A1855F94400A935AA /* Spaceship.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Spaceship.png; sourceTree = "<group>"; };
 		EB46C80C1855F94400A935AA /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		EB46C8121855F94400A935AA /* CellDefenceTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CellDefenceTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		EB46C8131855F94400A935AA /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
@@ -63,6 +72,18 @@
 		EB46C81F1855F94400A935AA /* CellDefenceTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CellDefenceTests.m; sourceTree = "<group>"; };
 		EB46C829185600AC00A935AA /* Microbe.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Microbe.h; path = ../Microbe.h; sourceTree = "<group>"; };
 		EB46C82A185600AC00A935AA /* Microbe.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Microbe.m; path = ../Microbe.m; sourceTree = "<group>"; };
+		EB46C8351856358900A935AA /* virus1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = virus1.png; sourceTree = "<group>"; };
+		EB46C8361856358900A935AA /* virus2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = virus2.png; sourceTree = "<group>"; };
+		EB46C83D1856377700A935AA /* player1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = player1.png; sourceTree = "<group>"; };
+		EB46C83E1856377700A935AA /* player2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = player2.png; sourceTree = "<group>"; };
+		EB46C8471856482A00A935AA /* barrier1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = barrier1.png; sourceTree = "<group>"; };
+		EB46C8491856483000A935AA /* barrier2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = barrier2.png; sourceTree = "<group>"; };
+		EB46C84A1856483000A935AA /* barrier3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = barrier3.png; sourceTree = "<group>"; };
+		EB46C84B1856483000A935AA /* barrier4.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = barrier4.png; sourceTree = "<group>"; };
+		EB46C84C1856483000A935AA /* barrier5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = barrier5.png; sourceTree = "<group>"; };
+		EB46C84D1856483000A935AA /* barrier6.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = barrier6.png; sourceTree = "<group>"; };
+		EB46C853185648DB00A935AA /* Object.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Object.h; sourceTree = "<group>"; };
+		EB46C854185648DB00A935AA /* Object.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Object.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -129,7 +150,7 @@
 				EB46C8051855F94400A935AA /* GameViewController.m */,
 				EB46C8071855F94400A935AA /* MyScene.h */,
 				EB46C8081855F94400A935AA /* MyScene.m */,
-				EB46C82C185600D000A935AA /* Objects */,
+				EB46C82C185600D000A935AA /* Classes */,
 				EB46C80C1855F94400A935AA /* Images.xcassets */,
 				EB46C7F61855F94400A935AA /* Supporting Files */,
 			);
@@ -139,7 +160,16 @@
 		EB46C7F61855F94400A935AA /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				EB46C80A1855F94400A935AA /* Spaceship.png */,
+				EB46C8471856482A00A935AA /* barrier1.png */,
+				EB46C8491856483000A935AA /* barrier2.png */,
+				EB46C84A1856483000A935AA /* barrier3.png */,
+				EB46C84B1856483000A935AA /* barrier4.png */,
+				EB46C84C1856483000A935AA /* barrier5.png */,
+				EB46C84D1856483000A935AA /* barrier6.png */,
+				EB46C83D1856377700A935AA /* player1.png */,
+				EB46C83E1856377700A935AA /* player2.png */,
+				EB46C8351856358900A935AA /* virus1.png */,
+				EB46C8361856358900A935AA /* virus2.png */,
 				EB46C7FE1855F94400A935AA /* AppDelegate.h */,
 				EB46C7FF1855F94400A935AA /* AppDelegate.m */,
 				EB46C7F71855F94400A935AA /* CellDefence-Info.plist */,
@@ -168,13 +198,15 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		EB46C82C185600D000A935AA /* Objects */ = {
+		EB46C82C185600D000A935AA /* Classes */ = {
 			isa = PBXGroup;
 			children = (
 				EB46C829185600AC00A935AA /* Microbe.h */,
 				EB46C82A185600AC00A935AA /* Microbe.m */,
+				EB46C853185648DB00A935AA /* Object.h */,
+				EB46C854185648DB00A935AA /* Object.m */,
 			);
-			name = Objects;
+			name = Classes;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -253,10 +285,19 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EB46C8521856483000A935AA /* barrier6.png in Resources */,
+				EB46C84F1856483000A935AA /* barrier3.png in Resources */,
+				EB46C8381856358900A935AA /* virus2.png in Resources */,
+				EB46C84E1856483000A935AA /* barrier2.png in Resources */,
 				EB46C7FA1855F94400A935AA /* InfoPlist.strings in Resources */,
+				EB46C8511856483000A935AA /* barrier5.png in Resources */,
 				EB46C80D1855F94400A935AA /* Images.xcassets in Resources */,
-				EB46C80B1855F94400A935AA /* Spaceship.png in Resources */,
+				EB46C83F1856377700A935AA /* player1.png in Resources */,
+				EB46C8481856482A00A935AA /* barrier1.png in Resources */,
+				EB46C8401856377700A935AA /* player2.png in Resources */,
+				EB46C8501856483000A935AA /* barrier4.png in Resources */,
 				EB46C8031855F94400A935AA /* Main.storyboard in Resources */,
+				EB46C8371856358900A935AA /* virus1.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -275,6 +316,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EB46C855185648DB00A935AA /* Object.m in Sources */,
 				EB46C8091855F94400A935AA /* MyScene.m in Sources */,
 				EB46C8061855F94400A935AA /* GameViewController.m in Sources */,
 				EB46C8001855F94400A935AA /* AppDelegate.m in Sources */,
@@ -490,6 +532,7 @@
 				EB46C8251855F94400A935AA /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		EB46C8261855F94400A935AA /* Build configuration list for PBXNativeTarget "CellDefenceTests" */ = {
 			isa = XCConfigurationList;
@@ -498,6 +541,7 @@
 				EB46C8281855F94400A935AA /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

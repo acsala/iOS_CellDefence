@@ -12,6 +12,7 @@
 
 -(Microbe*) initWithPosition:(CGPoint)position
              withPictureName:(NSString*)pictureName
+               withAnimation:(NSString*)animationPictureName
                     withName:(NSString*)name
                      andSize:(CGSize)size{
     
@@ -25,8 +26,17 @@
         node.position = position;
         node.name  = [NSString stringWithFormat:@"%@", name];
         
-        node.physicsBody = [SKPhysicsBody bodyWithCircleOfRadius:node.size.width * 0.5];
+        node.physicsBody = [SKPhysicsBody bodyWithCircleOfRadius:node.size.width * 0.2];
         node.physicsBody.affectedByGravity = NO;
+        
+        SKTexture *animationTexture1 = [SKTexture textureWithImageNamed:
+                                        [NSString stringWithFormat:@"%@", pictureName]];
+        SKTexture *animationTexture2 = [SKTexture textureWithImageNamed:
+                                        [NSString stringWithFormat:@"%@", animationPictureName]];
+        
+        SKAction *motion = [SKAction animateWithTextures:@[animationTexture1,animationTexture2] timePerFrame:.2];
+        [node runAction:[SKAction repeatActionForever:motion]];
+        
         
     }
     
