@@ -9,79 +9,40 @@
 #import "MyScene.h"
 #import "Microbe.h"
 #import "Object.h"
+#import "Level.h"
 
 #define NUMBER_OF_VIRUSES   5
-#define NUMBER_OF_OBJECTS   20
-#define PACE_OF_SPRITES     0.04f
+#define NUMBER_OF_OBJECTS   0
+#define NUMBER_OF_ACIDS     5
+#define PACE_OF_SPRITES     0.06f
+#define PACE_OF_ACIDS       0.01f
+#define PLAYER_LIVES        3
+
 
 @implementation MyScene{
     
     NSMutableArray *_viruses;
     NSMutableArray *_objects;
+    NSMutableArray *_acids;
+    NSMutableArray *_viralDNA;
     
     SKLabelNode *_scoreLabel;
     
+    int _nextAcid;
+    int _nextViralDNA;
+    int _playerLives;
+    int _playerScore;
+    int _numberOfViruses;
+    
+    
 }
+
 
 -(id)initWithSize:(CGSize)size {    
     if (self = [super initWithSize:size]) {
         /* Setup your scene here */
         
-        // add boundries so player / viruses don't get offscreen
-        self.physicsBody = [SKPhysicsBody bodyWithEdgeLoopFromRect: self.frame];
-        self.backgroundColor = [SKColor colorWithRed:0.15 green:0.15 blue:0.3 alpha:1.0];
-        
-        #pragma mark - Set Up Objects
-        // create array for objects
-        _objects = [[NSMutableArray alloc] initWithCapacity:NUMBER_OF_OBJECTS];
-        for (int i = 0; i < NUMBER_OF_OBJECTS; ++i) {
-            CGPoint randomLocation = CGPointMake(arc4random() % 200, arc4random() % 400);
-            Object *object = [[Object alloc] initWithPosition:randomLocation
-                                               withPictureName:@"barrier"
-                                                 withAnimation:@"barrier"
-                                                      withName:@"barrier"
-                                                       andSize:(CGSizeMake(50, 50))];
-            
-            [_objects addObject:object];
-            [self addChild:object];
-        }
-        
-        #pragma mark - Set Up Viruses
-        // create array for viruses
-        _viruses = [[NSMutableArray alloc] initWithCapacity:NUMBER_OF_VIRUSES];
-        for (int i = 0; i < NUMBER_OF_VIRUSES; ++i) {
-            Microbe *virus = [[Microbe alloc] initWithPosition:(CGPointMake(300, 500))
-                                               withPictureName:@"virus1"
-                                                 withAnimation:@"virus2"
-                                                      withName:@"virus"
-                                                       andSize:(CGSizeMake(50, 50))];
-
-            [_viruses addObject:virus];
-            [self addChild:virus];
-        }
-        
-        
-
-        #pragma mark - Set Up Player
-        // create sprite for player
-        Microbe *player = [[Microbe alloc] initWithPosition:(CGPointMake(100, 100))
-                                             withPictureName:@"player1"
-                                              withAnimation:@"player2"
-                                                    withName:@"player"
-                                                     andSize:(CGSizeMake(50, 50))];
-        player.color = [UIColor blackColor];
-        
-        [self addChild:player];
-        
-        // initialize _scoreLabel
-        _scoreLabel = [SKLabelNode labelNodeWithFontNamed:@"Arial"];
-        _scoreLabel.text = @"Score: 0";
-        _scoreLabel.fontColor = [UIColor whiteColor];
-        _scoreLabel.fontSize = 24.0f;
-        _scoreLabel.horizontalAlignmentMode = SKLabelHorizontalAlignmentModeLeft;
-        _scoreLabel.position = CGPointMake(10, 10);
-        
-        [self.scene addChild:_scoreLabel];
+        [self newGame];
         
     }
     return self;
@@ -106,8 +67,17 @@
     // rotate in the direction it moves
     double angle = atan2(location.y-player.position.y,location.x-player.position.x);
     [player runAction:[SKAction rotateToAngle:angle duration:.1]];
+   
+#pragma mark - Acid shoot
     
-    
+    // check if touch is on virus
+    SKNode *node = [self nodeAtPoint:location];
+
+    if ([node isKindOfClass:[Microbe class]] || [node isKindOfClass:[Object class]]) {
+        
+        [self shootFromArrayOfObjects:_acids withNextElementCounter:_nextAcid withInitialPositionRelativeTo:player withPositionShootingAt:location withVelocity:PACE_OF_ACIDS];
+        
+    }
 }
 
 -(void)update:(CFTimeInterval)currentTime {
@@ -119,12 +89,13 @@
     // find all the viruses
     for (SKSpriteNode *virus in _viruses){
         
-        // move viruses randomly
-        if (![virus actionForKey:@"randomMove"]) {
-            if (!virus.hidden == YES) {
-                
-                // random location on map
-                CGPoint randomLocation = CGPointMake(arc4random() % 300, arc4random() % 500);
+        // random location on map
+        CGPoint randomLocation = CGPointMake(arc4random() % 300, arc4random() % 500);
+
+#pragma mark - Move viruses and make them shoot their DNA
+        // move viruses randomly and shoot viral DNA
+        if (!virus.hidden && [virus inParentHierarchy:self]) {
+            if (![virus actionForKey:@"randomMove"]) {
                 
                 float moveSpeed = [self moveAtConstantSpeedFromSpritesLocation:virus
                                           withLocationMoveTo:randomLocation
@@ -132,31 +103,72 @@
                 
                 SKAction *randomMove = [SKAction moveTo:randomLocation duration:moveSpeed];
                 [virus runAction:randomMove withKey:@"randomMove"];
-            }
-            
-        }
-        
-        // detect collision
-        if ([player intersectsNode:virus]) {
-            [virus removeAllActions];
-            virus.hidden = YES;
-            virus.position = (CGPointMake(0, -100));
-        }
-        
-        for (SKSpriteNode *object in _objects){
-            
-            if (([player intersectsNode:object]||[virus intersectsNode:object])&&![object hasActions]) {
-                double randomAngle = atan2(arc4random() % 20, arc4random() % 20);
                 
-                //SKAction *rotate = [SKAction rotateByAngle:randomAngle duration:0.5f];
-                //[object runAction:[SKAction repeatActionForever:rotate]];
+                [self shootFromArrayOfObjects:_viralDNA
+                       withNextElementCounter:_nextViralDNA
+                withInitialPositionRelativeTo:virus
+                       withPositionShootingAt:randomLocation
+                                 withVelocity:PACE_OF_ACIDS];
             }
             
+        }
+        
+#pragma mark - Set up shoot-hit rules
+        
+        // detect shoots
+        for (SKSpriteNode *acid in _acids){
             
+            // check if virus got shoot
+            if ([virus intersectsNode:acid] &&
+                !virus.hidden && !acid.hidden &&
+                [virus inParentHierarchy:self] &&
+                // ending of a virus costs time due to animation, we dont want the give score to the player for shoting down an agonising virus multiple times
+                ![virus actionForKey:@"microbeEnds"]){
+                    
+                [self microbeGotHit:virus];
+                acid.hidden = YES;
+                _playerScore++;
+                _scoreLabel.text = [NSString stringWithFormat:@"Score: %d Lives: %d", _playerScore, _playerLives];
+                _numberOfViruses--;
+                
+                if (_numberOfViruses == 0) {
+                    [self gameEnded];
+                }
+                
+            }
+            
+            for (SKSpriteNode *object in _objects){
+            
+                if ([object intersectsNode:acid]) {
+                    acid.hidden = YES;
+                    object.hidden = YES;
+                    [object removeFromParent];
+                    [acid runAction:[SKAction moveTo:CGPointMake(0, -200) duration:0.001]];
+                }
+            
+            }
         }
 
     }
     
+    // find viralDNA
+    for (SKSpriteNode *viralDNA in _viralDNA){
+        
+    // check if player got shoot
+        if ([viralDNA intersectsNode:player]&& !viralDNA.hidden) {
+            _playerLives--;
+            _scoreLabel.text = [NSString stringWithFormat:@"Score: 0 Lives: %d", _playerLives];
+            viralDNA.hidden = YES;
+            [player runAction:[SKAction rotateByAngle:10 duration:2]];
+            [player runAction:[SKAction colorizeWithColor:[SKColor redColor] colorBlendFactor:1.0 duration:0.15]];
+            
+            if (_playerLives == 0) {
+                [self gameEnded];
+            }
+            
+        }
+        
+    }
 }
 
 #pragma mark - Set Up Sprite's attributes and abilities
@@ -175,5 +187,159 @@
     return moveSpeed;
 }
 
+-(void) shootFromArrayOfObjects:(NSMutableArray*)arrayOfObjects
+              withNextElementCounter:(NSInteger)tracker
+       withInitialPositionRelativeTo:(SKNode*)positionRelativeTo
+              withPositionShootingAt:(CGPoint)positionShootingAt
+                        withVelocity:(float)velocity{
+    
+    //Pick up a laser from one of your pre-made lasers.
+    SKSpriteNode *shoot = [arrayOfObjects objectAtIndex:tracker];
+    tracker++;
+    if (tracker >= arrayOfObjects.count) {
+        _nextAcid = 0;
+    }
+    
+    if (![shoot actionForKey:@"fired"] && !positionRelativeTo.hidden) {
+        //Set the initial position of the laser to where your ship is positioned.
+        shoot.position = CGPointMake(positionRelativeTo.position.x + shoot.size.width/2, positionRelativeTo.position.y+0);
+        shoot.hidden = NO;
+        [shoot removeAllActions];
+        
+        float contantMovingSpeed = [self moveAtConstantSpeedFromSpritesLocation:shoot
+                                                             withLocationMoveTo:positionShootingAt
+                                                                       withPace:velocity];
+        
+        SKAction *shootMoveAction = [SKAction moveTo:positionShootingAt duration:contantMovingSpeed];
+        SKAction *rotateShootAction = [SKAction repeatActionForever:[SKAction rotateToAngle:20 duration:1]];
+        
+        //Define a done action using a block that hides the laser when it hits the right edge.
+        SKAction *laserDoneAction = [SKAction runBlock:(dispatch_block_t)^() {
+            //NSLog(@"Animation Completed");
+            shoot.hidden = YES;
+        }];
+        
+        //Define a sequence action of the move and done actions
+        SKAction *moveLaserActionWithDone = [SKAction sequence:@[shootMoveAction,
+                                                                 laserDoneAction]];
+        [shoot runAction:moveLaserActionWithDone withKey:@"fired"];
+        [shoot runAction:rotateShootAction];
+    }
+}
+
+-(void) microbeGotHit:(SKNode*)nodeGotHit{
+    
+    SKAction *microbeEnds = [SKAction sequence:
+                          @[[SKAction colorizeWithColor:[SKColor redColor] colorBlendFactor:1.0 duration:0.15],
+                            [SKAction rotateByAngle:10.0f duration:2],
+                            //[SKAction waitForDuration:0.5],
+                            [SKAction colorizeWithColorBlendFactor:0.0 duration:0.15],
+                            [SKAction fadeOutWithDuration:0.5],
+                            [SKAction moveTo:CGPointMake(0, -200) duration:0.001],
+                            [SKAction removeFromParent]]];
+    
+    
+    [nodeGotHit runAction:microbeEnds withKey:@"microbeEnds"];
+    
+    NSLog(@"shoot hit hit");
+    
+}
+
+#pragma mark - Start game
+
+-(void) newGame{
+    
+    [self removeAllChildren];
+    
+    // add boundries so player / viruses don't get offscreen
+    self.physicsBody = [SKPhysicsBody bodyWithEdgeLoopFromRect: self.frame];
+    self.backgroundColor = [SKColor colorWithRed:0.15 green:0.15 blue:0.3 alpha:1.0];
+    
+    _playerLives = PLAYER_LIVES;
+    _playerScore = 0;
+    _numberOfViruses = NUMBER_OF_VIRUSES;
+    
+#pragma mark - Set Up Objects
+    // create array for objects
+    _objects = [[Level alloc] setUpObjects];
+    for (SKSpriteNode *object in _objects){
+        object.color = [UIColor blackColor];
+        [self addChild:object];
+        
+    }
+    
+#pragma mark - Set Up Viruses
+    // create array for viruses
+    
+    _viruses = [[Level alloc] setUpViruses];
+    for (SKSpriteNode *virus in _viruses){
+        
+        [self addChild:virus];
+        
+    }
+    
+#pragma mark - Set Up Acids and Viral DNAs
+    
+    _acids = [[Level alloc] setUpAcids];
+    for (SKSpriteNode *acid in _acids) {
+        [self addChild:acid];
+    }
+    
+    _viralDNA = [[Level alloc] setUpViralDNA];
+    for (SKSpriteNode *viralDNA in _viralDNA){
+        [self addChild:viralDNA];
+    }
+    
+    
+#pragma mark - Set Up Player
+    // create sprite for player
+    Microbe *player = [[Microbe alloc] initWithPosition:(CGPointMake(100, 100))
+                                        withPictureName:@"player1"
+                                          withAnimation:@"player2"
+                                               withName:@"player"
+                                                andSize:(CGSizeMake(50, 50))];
+    player.color = [UIColor blackColor];
+    
+    [self addChild:player];
+    
+#pragma mark - Set Up Scoring
+    
+    // initialize _scoreLabel
+    _scoreLabel = [SKLabelNode labelNodeWithFontNamed:@"Arial"];
+    _scoreLabel.text = [NSString stringWithFormat:@"Score: 0 Lives: %d", _playerLives];
+    _scoreLabel.fontColor = [UIColor whiteColor];
+    _scoreLabel.fontSize = 24.0f;
+    _scoreLabel.horizontalAlignmentMode = SKLabelHorizontalAlignmentModeLeft;
+    _scoreLabel.position = CGPointMake(10, 10);
+    
+    [self.scene addChild:_scoreLabel];
+    
+}
+
+-(void) gameEnded{
+    
+    NSString *message = [NSString stringWithFormat:@"You scored %d this time", _playerScore];
+    
+    UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Game over!"
+                                                 message:message delegate:self
+                                       cancelButtonTitle:@"New Game"
+                                       otherButtonTitles:nil];
+    
+    [av show];
+}
+
+-(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    
+    
+    // when the user accepts the dialog we begin a new game
+    if(buttonIndex == 0)
+    {
+        
+        [self newGame];
+    }
+    
+    
+}
 
 @end
