@@ -25,6 +25,7 @@
     NSMutableArray *_objects;
     NSMutableArray *_acids;
     NSMutableArray *_viralDNA;
+    NSMutableArray *_walls;
     
     SKLabelNode *_scoreLabel;
     
@@ -37,6 +38,14 @@
     
 }
 
+
+static inline CGFloat skRandf() {
+    return rand() / (CGFloat) RAND_MAX;
+}
+
+static inline CGFloat skRand(CGFloat low, CGFloat high) {
+    return skRandf() * (high - low) + low;
+}
 
 -(id)initWithSize:(CGSize)size {    
     if (self = [super initWithSize:size]) {
@@ -105,10 +114,12 @@
                 [virus runAction:randomMove withKey:@"randomMove"];
                 
                 [self shootFromArrayOfObjects:_viralDNA
-                       withNextElementCounter:_nextViralDNA
-                withInitialPositionRelativeTo:virus
-                       withPositionShootingAt:randomLocation
-                                 withVelocity:PACE_OF_ACIDS];
+                        withNextElementCounter:_nextViralDNA
+                        withInitialPositionRelativeTo:virus
+                        withPositionShootingAt:randomLocation
+                                     withVelocity:PACE_OF_ACIDS];
+                    
+                
             }
             
         }
@@ -128,8 +139,8 @@
                 [self microbeGotHit:virus];
                 acid.hidden = YES;
                 _playerScore++;
-                _scoreLabel.text = [NSString stringWithFormat:@"Score: %d Lives: %d", _playerScore, _playerLives];
                 _numberOfViruses--;
+                [self updateDisplayWithScore:_playerScore andPLayerLives:_playerLives];
                 
                 if (_numberOfViruses == 0) {
                     [self gameEnded];
@@ -137,12 +148,12 @@
                 
             }
             
-            for (SKSpriteNode *object in _objects){
+            for (SKSpriteNode *wall in _walls){
             
-                if ([object intersectsNode:acid]) {
+                if ([wall intersectsNode:acid] && !wall.hidden && [wall inParentHierarchy:self]) {
                     acid.hidden = YES;
-                    object.hidden = YES;
-                    [object removeFromParent];
+                    wall.hidden = YES;
+                    [wall removeFromParent];
                     [acid runAction:[SKAction moveTo:CGPointMake(0, -200) duration:0.001]];
                 }
             
@@ -157,13 +168,26 @@
     // check if player got shoot
         if ([viralDNA intersectsNode:player]&& !viralDNA.hidden) {
             _playerLives--;
-            _scoreLabel.text = [NSString stringWithFormat:@"Score: 0 Lives: %d", _playerLives];
+            [self updateDisplayWithScore:_playerScore andPLayerLives:_playerLives];
             viralDNA.hidden = YES;
             [player runAction:[SKAction rotateByAngle:10 duration:2]];
             [player runAction:[SKAction colorizeWithColor:[SKColor redColor] colorBlendFactor:1.0 duration:0.15]];
             
             if (_playerLives == 0) {
                 [self gameEnded];
+            }
+            
+        }
+        
+        // check if viralDNA intersects wall
+        for (SKSpriteNode *wall in _walls){
+            
+            if ([wall intersectsNode:viralDNA] && !wall.hidden
+                && [wall inParentHierarchy:self] && !viralDNA.hidden) {
+                viralDNA.hidden = YES;
+                wall.hidden = YES;
+                [wall removeFromParent];
+                [viralDNA runAction:[SKAction moveTo:CGPointMake(0, -200) duration:0.001]];
             }
             
         }
@@ -203,6 +227,7 @@
     if (![shoot actionForKey:@"fired"] && !positionRelativeTo.hidden) {
         //Set the initial position of the laser to where your ship is positioned.
         shoot.position = CGPointMake(positionRelativeTo.position.x + shoot.size.width/2, positionRelativeTo.position.y+0);
+        
         shoot.hidden = NO;
         [shoot removeAllActions];
         
@@ -247,9 +272,25 @@
 
 #pragma mark - Start game
 
+- (void)addRock
+{
+    SKSpriteNode *rock = [[SKSpriteNode alloc] initWithColor:[SKColor brownColor] size:CGSizeMake(8,8)];
+    rock.position = CGPointMake(skRand(0, self.size.width), self.size.height-50);
+    rock.name = @"rock";
+    rock.physicsBody = [SKPhysicsBody bodyWithRectangleOfSize:rock.size];
+    rock.physicsBody.usesPreciseCollisionDetection = YES;
+    [self addChild:rock];
+}
+
 -(void) newGame{
     
     [self removeAllChildren];
+    
+    SKAction *makeRocks = [SKAction sequence: @[
+                                                [SKAction performSelector:@selector(addRock) onTarget:self],
+                                                [SKAction waitForDuration:2.10 withRange:0.15]
+                                                ]];
+    [self runAction: [SKAction repeatAction:makeRocks count:10]];
     
     // add boundries so player / viruses don't get offscreen
     self.physicsBody = [SKPhysicsBody bodyWithEdgeLoopFromRect: self.frame];
@@ -268,12 +309,20 @@
         
     }
     
-#pragma mark - Set Up Viruses
-    // create array for viruses
+#pragma mark - Set Up Walls
     
+    _walls = [[Level alloc] setUpWalls];
+    for (SKSpriteNode *wall in _walls){
+        [self addChild:wall];
+    }
+    
+#pragma mark - Set Up Viruses
+    
+    
+    //create array for viruses
     _viruses = [[Level alloc] setUpViruses];
     for (SKSpriteNode *virus in _viruses){
-        
+    
         [self addChild:virus];
         
     }
@@ -339,6 +388,12 @@
         [self newGame];
     }
     
+    
+}
+
+-(void) updateDisplayWithScore:(NSInteger)playerScore andPLayerLives:(NSInteger)playerLives{
+    
+    _scoreLabel.text = [NSString stringWithFormat:@"Score: %d Lives: %d", playerScore, playerLives];
     
 }
 

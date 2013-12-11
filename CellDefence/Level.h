@@ -14,7 +14,6 @@
 -(NSMutableArray*) setUpObjects;
 -(NSMutableArray*) setUpAcids;
 -(NSMutableArray*) setUpViralDNA;
-
-
+-(NSMutableArray*) setUpWalls;
 
 @end

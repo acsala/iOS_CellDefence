@@ -26,7 +26,7 @@
         node.position = position;
         node.name  = [NSString stringWithFormat:@"%@", name];
         
-        node.physicsBody = [SKPhysicsBody bodyWithCircleOfRadius:node.size.width * 0.2];
+        node.physicsBody = [SKPhysicsBody bodyWithCircleOfRadius:node.size.height * 0.2];
         node.physicsBody.affectedByGravity = NO;
         
         SKTexture *animationTexture1 = [SKTexture textureWithImageNamed:

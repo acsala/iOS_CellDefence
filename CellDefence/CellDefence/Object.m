@@ -30,7 +30,7 @@
         node.position = position;
         node.name  = [NSString stringWithFormat:@"%@", name];
         
-        node.physicsBody = [SKPhysicsBody bodyWithRectangleOfSize:node.size];
+        node.physicsBody = [SKPhysicsBody bodyWithRectangleOfSize:CGSizeMake(node.size.width * 0.8, node.size.height * 0.8 )];
         node.physicsBody.affectedByGravity = NO;
         
     }
