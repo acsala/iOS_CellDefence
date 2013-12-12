@@ -11,7 +11,7 @@
 #import "Object.h"
 #import "Level.h"
 
-#define NUMBER_OF_VIRUSES   5
+#define NUMBER_OF_VIRUSES   10
 #define NUMBER_OF_OBJECTS   0
 #define NUMBER_OF_ACIDS     5
 #define PACE_OF_SPRITES     0.06f
@@ -29,27 +29,26 @@
     
     SKLabelNode *_scoreLabel;
     
+    CGSize _sizeOfScene;
+    
     int _nextAcid;
     int _nextViralDNA;
     int _playerLives;
     int _playerScore;
-    int _numberOfViruses;
+    int _totalNumberOfViruses;
+    int _numberOfVirusesOnScreen;
+    int _virusRespawnCounter;
+    int _virusGotKilled;
     
     
-}
-
-
-static inline CGFloat skRandf() {
-    return rand() / (CGFloat) RAND_MAX;
-}
-
-static inline CGFloat skRand(CGFloat low, CGFloat high) {
-    return skRandf() * (high - low) + low;
 }
 
 -(id)initWithSize:(CGSize)size {    
     if (self = [super initWithSize:size]) {
         /* Setup your scene here */
+        
+        // get the actual size of the scene
+        _sizeOfScene = self.scene.size;
         
         [self newGame];
         
@@ -82,9 +81,17 @@ static inline CGFloat skRand(CGFloat low, CGFloat high) {
     // check if touch is on virus
     SKNode *node = [self nodeAtPoint:location];
 
-    if ([node isKindOfClass:[Microbe class]] || [node isKindOfClass:[Object class]]) {
+    if (([node isKindOfClass:[Microbe class]] ||
+         [node isKindOfClass:[Object class]] ||
+         [node.name isEqualToString:@"viralDNA"]) &&
+        ![node.name isEqualToString:@"player"]) {
         
-        [self shootFromArrayOfObjects:_acids withNextElementCounter:_nextAcid withInitialPositionRelativeTo:player withPositionShootingAt:location withVelocity:PACE_OF_ACIDS];
+        [self shootFromArrayOfObjects:_acids
+                withNextElementCounter:_nextAcid
+                withInitialPositionRelativeTo:player
+                withPositionShootingAt:location
+                         withVelocity:PACE_OF_ACIDS];
+        _nextAcid++;
         
     }
 }
@@ -99,7 +106,7 @@ static inline CGFloat skRand(CGFloat low, CGFloat high) {
     for (SKSpriteNode *virus in _viruses){
         
         // random location on map
-        CGPoint randomLocation = CGPointMake(arc4random() % 300, arc4random() % 500);
+        CGPoint randomLocation = CGPointMake(arc4random() % (int)roundf(_sizeOfScene.width), arc4random() % (int)roundf(_sizeOfScene.height));
 
 #pragma mark - Move viruses and make them shoot their DNA
         // move viruses randomly and shoot viral DNA
@@ -113,12 +120,15 @@ static inline CGFloat skRand(CGFloat low, CGFloat high) {
                 SKAction *randomMove = [SKAction moveTo:randomLocation duration:moveSpeed];
                 [virus runAction:randomMove withKey:@"randomMove"];
                 
+                //NSLog([NSString stringWithFormat:@"x :%f",virus.position.x]);
+                //NSLog([NSString stringWithFormat:@"y :%f",virus.position.y]);
+                
                 [self shootFromArrayOfObjects:_viralDNA
                         withNextElementCounter:_nextViralDNA
                         withInitialPositionRelativeTo:virus
                         withPositionShootingAt:randomLocation
                                      withVelocity:PACE_OF_ACIDS];
-                    
+                _nextViralDNA++;
                 
             }
             
@@ -133,17 +143,36 @@ static inline CGFloat skRand(CGFloat low, CGFloat high) {
             if ([virus intersectsNode:acid] &&
                 !virus.hidden && !acid.hidden &&
                 [virus inParentHierarchy:self] &&
+                [acid inParentHierarchy:self]&&
                 // ending of a virus costs time due to animation, we dont want the give score to the player for shoting down an agonising virus multiple times
                 ![virus actionForKey:@"microbeEnds"]){
                     
                 [self microbeGotHit:virus];
                 acid.hidden = YES;
                 _playerScore++;
-                _numberOfViruses--;
+                _numberOfVirusesOnScreen--;
+                _virusGotKilled++;
                 [self updateDisplayWithScore:_playerScore andPLayerLives:_playerLives];
                 
-                if (_numberOfViruses == 0) {
+                NSLog([NSString stringWithFormat:@"virusOnScreen: %d,virusGotKilled: %d, virusTOtal: %d", _numberOfVirusesOnScreen, _virusGotKilled, _totalNumberOfViruses]);
+                
+                if (_virusGotKilled == _totalNumberOfViruses) {
                     [self gameEnded];
+                }else{
+                    [self addVirus];
+                }
+                
+            }
+            
+            for (SKSpriteNode *viralDNA in _viralDNA){
+                if ([viralDNA intersectsNode:acid] &&
+                    [acid inParentHierarchy:self.scene] &&
+                    [viralDNA inParentHierarchy:self.scene]) {
+                    
+                    [viralDNA removeFromParent];
+                    [acid removeFromParent];
+                    [viralDNA removeAllActions];
+                    [acid removeAllActions];
                 }
                 
             }
@@ -166,7 +195,8 @@ static inline CGFloat skRand(CGFloat low, CGFloat high) {
     for (SKSpriteNode *viralDNA in _viralDNA){
         
     // check if player got shoot
-        if ([viralDNA intersectsNode:player]&& !viralDNA.hidden) {
+        if ([viralDNA intersectsNode:player]&& !viralDNA.hidden
+            && [viralDNA inParentHierarchy:self]) {
             _playerLives--;
             [self updateDisplayWithScore:_playerScore andPLayerLives:_playerLives];
             viralDNA.hidden = YES;
@@ -220,35 +250,56 @@ static inline CGFloat skRand(CGFloat low, CGFloat high) {
     //Pick up a laser from one of your pre-made lasers.
     SKSpriteNode *shoot = [arrayOfObjects objectAtIndex:tracker];
     tracker++;
+    NSLog([NSString stringWithFormat:@"tracker: %d", tracker]);
     if (tracker >= arrayOfObjects.count) {
         _nextAcid = 0;
+        _nextViralDNA =0;
     }
     
-    if (![shoot actionForKey:@"fired"] && !positionRelativeTo.hidden) {
+    if (!positionRelativeTo.hidden) {
         //Set the initial position of the laser to where your ship is positioned.
-        shoot.position = CGPointMake(positionRelativeTo.position.x + shoot.size.width/2, positionRelativeTo.position.y+0);
         
+        if (![shoot inParentHierarchy:self]) {
+            [self addChild:shoot];
+        }
+        
+        shoot.speed = 1.0;
         shoot.hidden = NO;
+        shoot.alpha = 1.0;
         [shoot removeAllActions];
         
-        float contantMovingSpeed = [self moveAtConstantSpeedFromSpritesLocation:shoot
+        shoot.position = CGPointMake(positionRelativeTo.position.x, positionRelativeTo.position.y);
+        
+        
+        float constantMovingSpeed = [self moveAtConstantSpeedFromSpritesLocation:shoot
                                                              withLocationMoveTo:positionShootingAt
                                                                        withPace:velocity];
+    
         
-        SKAction *shootMoveAction = [SKAction moveTo:positionShootingAt duration:contantMovingSpeed];
-        SKAction *rotateShootAction = [SKAction repeatActionForever:[SKAction rotateToAngle:20 duration:1]];
+        //CGVector _vectorToMoveBy = CGVectorMake(positionShootingAt.x - positionRelativeTo.physicsBody.velocity.dx, positionShootingAt.y - positionRelativeTo.physicsBody.velocity.dy);
+        
+        SKAction *shootMoveAction = [SKAction moveTo:positionShootingAt duration:2];
+        SKAction *rotateShootAction = [SKAction rotateToAngle:20 duration:2];
+        
+        SKAction *slowDown = [SKAction speedTo:0.1 duration:2.8];
+        SKAction *fadeOut = [SKAction fadeOutWithDuration:0.5];
+        SKAction *removeNode = [SKAction removeFromParent];
+
         
         //Define a done action using a block that hides the laser when it hits the right edge.
-        SKAction *laserDoneAction = [SKAction runBlock:(dispatch_block_t)^() {
+        /*SKAction *laserDoneAction = [SKAction runBlock:(dispatch_block_t)^() {
             //NSLog(@"Animation Completed");
             shoot.hidden = YES;
-        }];
+        }];*/
         
         //Define a sequence action of the move and done actions
         SKAction *moveLaserActionWithDone = [SKAction sequence:@[shootMoveAction,
-                                                                 laserDoneAction]];
+                                                                 fadeOut,
+                                                                 removeNode
+                                                                 ]];
         [shoot runAction:moveLaserActionWithDone withKey:@"fired"];
         [shoot runAction:rotateShootAction];
+        [shoot runAction:slowDown];
     }
 }
 
@@ -272,25 +323,9 @@ static inline CGFloat skRand(CGFloat low, CGFloat high) {
 
 #pragma mark - Start game
 
-- (void)addRock
-{
-    SKSpriteNode *rock = [[SKSpriteNode alloc] initWithColor:[SKColor brownColor] size:CGSizeMake(8,8)];
-    rock.position = CGPointMake(skRand(0, self.size.width), self.size.height-50);
-    rock.name = @"rock";
-    rock.physicsBody = [SKPhysicsBody bodyWithRectangleOfSize:rock.size];
-    rock.physicsBody.usesPreciseCollisionDetection = YES;
-    [self addChild:rock];
-}
-
 -(void) newGame{
     
     [self removeAllChildren];
-    
-    SKAction *makeRocks = [SKAction sequence: @[
-                                                [SKAction performSelector:@selector(addRock) onTarget:self],
-                                                [SKAction waitForDuration:2.10 withRange:0.15]
-                                                ]];
-    [self runAction: [SKAction repeatAction:makeRocks count:10]];
     
     // add boundries so player / viruses don't get offscreen
     self.physicsBody = [SKPhysicsBody bodyWithEdgeLoopFromRect: self.frame];
@@ -298,7 +333,12 @@ static inline CGFloat skRand(CGFloat low, CGFloat high) {
     
     _playerLives = PLAYER_LIVES;
     _playerScore = 0;
-    _numberOfViruses = NUMBER_OF_VIRUSES;
+    _totalNumberOfViruses = NUMBER_OF_VIRUSES;
+    _numberOfVirusesOnScreen = 0;
+    _virusRespawnCounter = 0;
+    _virusGotKilled = 0;
+    _nextAcid = 0;
+    _nextViralDNA = 0;
     
 #pragma mark - Set Up Objects
     // create array for objects
@@ -321,23 +361,18 @@ static inline CGFloat skRand(CGFloat low, CGFloat high) {
     
     //create array for viruses
     _viruses = [[Level alloc] setUpViruses];
-    for (SKSpriteNode *virus in _viruses){
     
-        [self addChild:virus];
-        
-    }
+    SKAction *makeVirus = [SKAction sequence: @[
+                                                [SKAction performSelector:@selector(addVirus) onTarget:self],
+                                                [SKAction waitForDuration:1.0 withRange:0.15]
+                                                ]];
+    [self runAction: [SKAction repeatAction:makeVirus count:_totalNumberOfViruses]];
     
 #pragma mark - Set Up Acids and Viral DNAs
     
     _acids = [[Level alloc] setUpAcids];
-    for (SKSpriteNode *acid in _acids) {
-        [self addChild:acid];
-    }
     
     _viralDNA = [[Level alloc] setUpViralDNA];
-    for (SKSpriteNode *viralDNA in _viralDNA){
-        [self addChild:viralDNA];
-    }
     
     
 #pragma mark - Set Up Player
@@ -362,6 +397,30 @@ static inline CGFloat skRand(CGFloat low, CGFloat high) {
     _scoreLabel.position = CGPointMake(10, 10);
     
     [self.scene addChild:_scoreLabel];
+    
+}
+
+- (void)addVirus
+{
+    if (_numberOfVirusesOnScreen < _totalNumberOfViruses && (_virusGotKilled+_numberOfVirusesOnScreen) < _totalNumberOfViruses) {
+    
+        if (_numberOfVirusesOnScreen < 5) {
+            SKSpriteNode *virus = _viruses[_virusRespawnCounter];
+            
+            // set up viruses at random x cordinates at the top of the screen
+            virus.position = CGPointMake(arc4random() % (int)roundf(_sizeOfScene.width), (int)roundf(_sizeOfScene.height - 10));
+            
+            [self addChild:virus];
+            
+            _numberOfVirusesOnScreen++;
+            _virusRespawnCounter++;
+            
+            //NSLog([NSString stringWithFormat:@"%d",_numberOfVirusesOnScreen]);
+            //NSLog([NSString stringWithFormat:@"%d",_totalNumberOfViruses]);
+        }
+        
+        
+    }
     
 }
 

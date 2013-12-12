@@ -11,11 +11,11 @@
 #import "Object.h"
 #import "Wall.h"
 
-#define NUMBER_OF_VIRUSES   5
+#define NUMBER_OF_VIRUSES   10
 #define NUMBER_OF_OBJECTS   0
-#define NUMBER_OF_WALLS     50
-#define NUMBER_OF_ACIDS     5
-#define NUMBER_OF_VIRAL_DNA 5
+#define NUMBER_OF_WALLS     0
+#define NUMBER_OF_ACIDS     10
+#define NUMBER_OF_VIRAL_DNA 10
 
 @implementation Level{
 
@@ -27,6 +27,13 @@
 
 }
 
+static inline CGFloat skRandf() {
+    return rand() / (CGFloat) RAND_MAX;
+}
+
+static inline CGFloat skRand(CGFloat low, CGFloat high) {
+    return skRandf() * (high - low) + low;
+}
 
 -(NSMutableArray*) setUpViruses{
     
@@ -37,6 +44,7 @@
                                              withAnimation:@"virus2"
                                                   withName:@"virus"
                                                    andSize:(CGSizeMake(50, 50))];
+        virus.position = CGPointMake(skRand(0, virus.size.width), virus.size.height+50);
         virus.color = [SKColor redColor];
         virus.colorBlendFactor = 0.5;
         [_virusesArray addObject:virus];
@@ -48,7 +56,7 @@
     
     _objectsArray = [[NSMutableArray alloc] initWithCapacity:NUMBER_OF_OBJECTS];
     for (int i = 0; i < NUMBER_OF_OBJECTS; ++i) {
-        CGPoint randomLocation = CGPointMake(arc4random() % 200, arc4random() % 400);
+        CGPoint randomLocation = CGPointMake(arc4random() % 320, arc4random() % 480);
         Object *object = [[Object alloc] initWithPosition:randomLocation
                                           withPictureName:@"barrier"
                                             withAnimation:@"barrier"
@@ -85,6 +93,7 @@
         acid.size = CGSizeMake(10, 10);
         acid.physicsBody = [SKPhysicsBody bodyWithCircleOfRadius:acid.size.width * 0.2];
         acid.physicsBody.affectedByGravity = NO;
+        acid.name = @"acid";
         
         [_acidsArray addObject:acid];
     }
@@ -97,17 +106,17 @@
     
     _viralDNAArray = [[NSMutableArray alloc] initWithCapacity:NUMBER_OF_VIRAL_DNA];
     for (int i = 0; i < NUMBER_OF_VIRAL_DNA; ++i) {
-        SKSpriteNode *acid = [SKSpriteNode spriteNodeWithImageNamed:@"viralDNA"];
-        acid.hidden = YES;
-        acid.size = CGSizeMake(10, 10);
-        acid.physicsBody = [SKPhysicsBody bodyWithCircleOfRadius:acid.size.width * 0.2];
-        acid.physicsBody.affectedByGravity = NO;
+        SKSpriteNode *viralDNA = [SKSpriteNode spriteNodeWithImageNamed:@"viralDNA"];
+        viralDNA.hidden = YES;
+        viralDNA.size = CGSizeMake(10, 10);
+        viralDNA.physicsBody = [SKPhysicsBody bodyWithCircleOfRadius:viralDNA.size.width * 0.2];
+        viralDNA.physicsBody.affectedByGravity = NO;
+        viralDNA.name = @"viralDNA";
         
-        [_viralDNAArray addObject:acid];
+        [_viralDNAArray addObject:viralDNA];
     }
     
     return _viralDNAArray;
-    
     
 }
 
