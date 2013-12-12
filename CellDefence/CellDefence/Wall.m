@@ -27,9 +27,12 @@
         node.position = position;
         node.name  = [NSString stringWithFormat:@"%@", name];
         
-        node.physicsBody = [SKPhysicsBody bodyWithRectangleOfSize:CGSizeMake(node.size.width * 0.8, node.size.height * 0.8 )];
+        node.physicsBody = [SKPhysicsBody bodyWithCircleOfRadius:node.size.height * 0.2];
         node.physicsBody.affectedByGravity = NO;
-        node.physicsBody.dynamic = NO;
+        
+        NSLog([NSString stringWithFormat:@"%f", node.size.height]);
+        
+        //node.physicsBody.dynamic = NO;
         
     }
     

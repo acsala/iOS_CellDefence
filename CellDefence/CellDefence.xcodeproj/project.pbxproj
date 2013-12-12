@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		EB2E94501857795B00D78A1E /* Wall.m in Sources */ = {isa = PBXBuildFile; fileRef = EB2E944F1857795B00D78A1E /* Wall.m */; };
-		EB2E945218577CC700D78A1E /* wall1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = EB2E945118577CC700D78A1E /* wall1.jpg */; };
 		EB46C7EE1855F94400A935AA /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EB46C7ED1855F94400A935AA /* Foundation.framework */; };
 		EB46C7F01855F94400A935AA /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EB46C7EF1855F94400A935AA /* CoreGraphics.framework */; };
 		EB46C7F21855F94400A935AA /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EB46C7F11855F94400A935AA /* UIKit.framework */; };
@@ -26,21 +25,16 @@
 		EB46C81E1855F94400A935AA /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = EB46C81C1855F94400A935AA /* InfoPlist.strings */; };
 		EB46C8201855F94400A935AA /* CellDefenceTests.m in Sources */ = {isa = PBXBuildFile; fileRef = EB46C81F1855F94400A935AA /* CellDefenceTests.m */; };
 		EB46C82B185600AC00A935AA /* Microbe.m in Sources */ = {isa = PBXBuildFile; fileRef = EB46C82A185600AC00A935AA /* Microbe.m */; };
-		EB46C8371856358900A935AA /* virus1.png in Resources */ = {isa = PBXBuildFile; fileRef = EB46C8351856358900A935AA /* virus1.png */; };
-		EB46C8381856358900A935AA /* virus2.png in Resources */ = {isa = PBXBuildFile; fileRef = EB46C8361856358900A935AA /* virus2.png */; };
-		EB46C83F1856377700A935AA /* player1.png in Resources */ = {isa = PBXBuildFile; fileRef = EB46C83D1856377700A935AA /* player1.png */; };
-		EB46C8401856377700A935AA /* player2.png in Resources */ = {isa = PBXBuildFile; fileRef = EB46C83E1856377700A935AA /* player2.png */; };
-		EB46C8481856482A00A935AA /* barrier1.png in Resources */ = {isa = PBXBuildFile; fileRef = EB46C8471856482A00A935AA /* barrier1.png */; };
-		EB46C84E1856483000A935AA /* barrier2.png in Resources */ = {isa = PBXBuildFile; fileRef = EB46C8491856483000A935AA /* barrier2.png */; };
-		EB46C84F1856483000A935AA /* barrier3.png in Resources */ = {isa = PBXBuildFile; fileRef = EB46C84A1856483000A935AA /* barrier3.png */; };
-		EB46C8501856483000A935AA /* barrier4.png in Resources */ = {isa = PBXBuildFile; fileRef = EB46C84B1856483000A935AA /* barrier4.png */; };
-		EB46C8511856483000A935AA /* barrier5.png in Resources */ = {isa = PBXBuildFile; fileRef = EB46C84C1856483000A935AA /* barrier5.png */; };
-		EB46C8521856483000A935AA /* barrier6.png in Resources */ = {isa = PBXBuildFile; fileRef = EB46C84D1856483000A935AA /* barrier6.png */; };
 		EB46C855185648DB00A935AA /* Object.m in Sources */ = {isa = PBXBuildFile; fileRef = EB46C854185648DB00A935AA /* Object.m */; };
-		EB819BF318575A4900E3C688 /* viralDNA.png in Resources */ = {isa = PBXBuildFile; fileRef = EB819BF218575A4900E3C688 /* viralDNA.png */; };
-		EB89511F1857202700A2C66D /* viralDNA_red.png in Resources */ = {isa = PBXBuildFile; fileRef = EB89511E1857202700A2C66D /* viralDNA_red.png */; };
 		EBD6FB82185681F700632BDE /* Level.m in Sources */ = {isa = PBXBuildFile; fileRef = EBD6FB81185681F700632BDE /* Level.m */; };
-		EBE8055E185674EE000E14C3 /* acid_blue.png in Resources */ = {isa = PBXBuildFile; fileRef = EBE8055D185674EE000E14C3 /* acid_blue.png */; };
+		EBF1748B1859EFB700F5D975 /* player1.png in Resources */ = {isa = PBXBuildFile; fileRef = EBF174891859EFB700F5D975 /* player1.png */; };
+		EBF1748E1859EFE700F5D975 /* player2.png in Resources */ = {isa = PBXBuildFile; fileRef = EBF1748D1859EFE700F5D975 /* player2.png */; };
+		EBF174911859F0AC00F5D975 /* virus1.png in Resources */ = {isa = PBXBuildFile; fileRef = EBF1748F1859F0AC00F5D975 /* virus1.png */; };
+		EBF174941859F10200F5D975 /* virus2.png in Resources */ = {isa = PBXBuildFile; fileRef = EBF174931859F10200F5D975 /* virus2.png */; };
+		EBF174961859F24D00F5D975 /* viralDNA.png in Resources */ = {isa = PBXBuildFile; fileRef = EBF174951859F24D00F5D975 /* viralDNA.png */; };
+		EBF174981859F2DA00F5D975 /* acid.png in Resources */ = {isa = PBXBuildFile; fileRef = EBF174971859F2DA00F5D975 /* acid.png */; };
+		EBF1749A1859F75A00F5D975 /* wall1.png in Resources */ = {isa = PBXBuildFile; fileRef = EBF174991859F75A00F5D975 /* wall1.png */; };
+		EBF1749C1859F7B000F5D975 /* wall2.png in Resources */ = {isa = PBXBuildFile; fileRef = EBF1749B1859F7B000F5D975 /* wall2.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -56,7 +50,6 @@
 /* Begin PBXFileReference section */
 		EB2E944E1857795B00D78A1E /* Wall.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Wall.h; sourceTree = "<group>"; };
 		EB2E944F1857795B00D78A1E /* Wall.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Wall.m; sourceTree = "<group>"; };
-		EB2E945118577CC700D78A1E /* wall1.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = wall1.jpg; sourceTree = "<group>"; };
 		EB46C7EA1855F94400A935AA /* CellDefence.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CellDefence.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EB46C7ED1855F94400A935AA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		EB46C7EF1855F94400A935AA /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -81,23 +74,18 @@
 		EB46C81F1855F94400A935AA /* CellDefenceTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CellDefenceTests.m; sourceTree = "<group>"; };
 		EB46C829185600AC00A935AA /* Microbe.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Microbe.h; path = ../Microbe.h; sourceTree = "<group>"; };
 		EB46C82A185600AC00A935AA /* Microbe.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Microbe.m; path = ../Microbe.m; sourceTree = "<group>"; };
-		EB46C8351856358900A935AA /* virus1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = virus1.png; sourceTree = "<group>"; };
-		EB46C8361856358900A935AA /* virus2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = virus2.png; sourceTree = "<group>"; };
-		EB46C83D1856377700A935AA /* player1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = player1.png; sourceTree = "<group>"; };
-		EB46C83E1856377700A935AA /* player2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = player2.png; sourceTree = "<group>"; };
-		EB46C8471856482A00A935AA /* barrier1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = barrier1.png; sourceTree = "<group>"; };
-		EB46C8491856483000A935AA /* barrier2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = barrier2.png; sourceTree = "<group>"; };
-		EB46C84A1856483000A935AA /* barrier3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = barrier3.png; sourceTree = "<group>"; };
-		EB46C84B1856483000A935AA /* barrier4.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = barrier4.png; sourceTree = "<group>"; };
-		EB46C84C1856483000A935AA /* barrier5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = barrier5.png; sourceTree = "<group>"; };
-		EB46C84D1856483000A935AA /* barrier6.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = barrier6.png; sourceTree = "<group>"; };
 		EB46C853185648DB00A935AA /* Object.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Object.h; sourceTree = "<group>"; };
 		EB46C854185648DB00A935AA /* Object.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Object.m; sourceTree = "<group>"; };
-		EB819BF218575A4900E3C688 /* viralDNA.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = viralDNA.png; sourceTree = "<group>"; };
-		EB89511E1857202700A2C66D /* viralDNA_red.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = viralDNA_red.png; sourceTree = "<group>"; };
 		EBD6FB80185681F700632BDE /* Level.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Level.h; path = ../Level.h; sourceTree = "<group>"; };
 		EBD6FB81185681F700632BDE /* Level.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Level.m; path = ../Level.m; sourceTree = "<group>"; };
-		EBE8055D185674EE000E14C3 /* acid_blue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = acid_blue.png; sourceTree = "<group>"; };
+		EBF174891859EFB700F5D975 /* player1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = player1.png; sourceTree = "<group>"; };
+		EBF1748D1859EFE700F5D975 /* player2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = player2.png; sourceTree = "<group>"; };
+		EBF1748F1859F0AC00F5D975 /* virus1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = virus1.png; sourceTree = "<group>"; };
+		EBF174931859F10200F5D975 /* virus2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = virus2.png; sourceTree = "<group>"; };
+		EBF174951859F24D00F5D975 /* viralDNA.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = viralDNA.png; sourceTree = "<group>"; };
+		EBF174971859F2DA00F5D975 /* acid.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = acid.png; sourceTree = "<group>"; };
+		EBF174991859F75A00F5D975 /* wall1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = wall1.png; sourceTree = "<group>"; };
+		EBF1749B1859F7B000F5D975 /* wall2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = wall2.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -174,20 +162,14 @@
 		EB46C7F61855F94400A935AA /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				EB2E945118577CC700D78A1E /* wall1.jpg */,
-				EB819BF218575A4900E3C688 /* viralDNA.png */,
-				EBE8055D185674EE000E14C3 /* acid_blue.png */,
-				EB89511E1857202700A2C66D /* viralDNA_red.png */,
-				EB46C8471856482A00A935AA /* barrier1.png */,
-				EB46C8491856483000A935AA /* barrier2.png */,
-				EB46C84A1856483000A935AA /* barrier3.png */,
-				EB46C84B1856483000A935AA /* barrier4.png */,
-				EB46C84C1856483000A935AA /* barrier5.png */,
-				EB46C84D1856483000A935AA /* barrier6.png */,
-				EB46C83D1856377700A935AA /* player1.png */,
-				EB46C83E1856377700A935AA /* player2.png */,
-				EB46C8351856358900A935AA /* virus1.png */,
-				EB46C8361856358900A935AA /* virus2.png */,
+				EBF1749B1859F7B000F5D975 /* wall2.png */,
+				EBF174991859F75A00F5D975 /* wall1.png */,
+				EBF174971859F2DA00F5D975 /* acid.png */,
+				EBF174951859F24D00F5D975 /* viralDNA.png */,
+				EBF1748F1859F0AC00F5D975 /* virus1.png */,
+				EBF174931859F10200F5D975 /* virus2.png */,
+				EBF174891859EFB700F5D975 /* player1.png */,
+				EBF1748D1859EFE700F5D975 /* player2.png */,
 				EB46C7FE1855F94400A935AA /* AppDelegate.h */,
 				EB46C7FF1855F94400A935AA /* AppDelegate.m */,
 				EB46C7F71855F94400A935AA /* CellDefence-Info.plist */,
@@ -307,23 +289,17 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				EB819BF318575A4900E3C688 /* viralDNA.png in Resources */,
-				EB46C8521856483000A935AA /* barrier6.png in Resources */,
-				EB46C84F1856483000A935AA /* barrier3.png in Resources */,
-				EB46C8381856358900A935AA /* virus2.png in Resources */,
-				EB2E945218577CC700D78A1E /* wall1.jpg in Resources */,
-				EB46C84E1856483000A935AA /* barrier2.png in Resources */,
+				EBF174961859F24D00F5D975 /* viralDNA.png in Resources */,
+				EBF1748E1859EFE700F5D975 /* player2.png in Resources */,
+				EBF1749C1859F7B000F5D975 /* wall2.png in Resources */,
 				EB46C7FA1855F94400A935AA /* InfoPlist.strings in Resources */,
-				EB46C8511856483000A935AA /* barrier5.png in Resources */,
+				EBF174941859F10200F5D975 /* virus2.png in Resources */,
+				EBF174911859F0AC00F5D975 /* virus1.png in Resources */,
 				EB46C80D1855F94400A935AA /* Images.xcassets in Resources */,
-				EB46C83F1856377700A935AA /* player1.png in Resources */,
-				EB46C8481856482A00A935AA /* barrier1.png in Resources */,
-				EB46C8401856377700A935AA /* player2.png in Resources */,
-				EBE8055E185674EE000E14C3 /* acid_blue.png in Resources */,
-				EB89511F1857202700A2C66D /* viralDNA_red.png in Resources */,
-				EB46C8501856483000A935AA /* barrier4.png in Resources */,
+				EBF174981859F2DA00F5D975 /* acid.png in Resources */,
+				EBF1748B1859EFB700F5D975 /* player1.png in Resources */,
 				EB46C8031855F94400A935AA /* Main.storyboard in Resources */,
-				EB46C8371856358900A935AA /* virus1.png in Resources */,
+				EBF1749A1859F75A00F5D975 /* wall1.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

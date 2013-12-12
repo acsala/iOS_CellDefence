@@ -120,6 +120,10 @@
                 SKAction *randomMove = [SKAction moveTo:randomLocation duration:moveSpeed];
                 [virus runAction:randomMove withKey:@"randomMove"];
                 
+                // rotate in the direction it moves
+                double angle2 = atan2(randomLocation.y-virus.position.y, randomLocation.x-virus.position.x);
+                [virus runAction:[SKAction rotateToAngle:angle2 duration:.1]];
+                
                 //NSLog([NSString stringWithFormat:@"x :%f",virus.position.x]);
                 //NSLog([NSString stringWithFormat:@"y :%f",virus.position.y]);
                 
@@ -179,11 +183,22 @@
             
             for (SKSpriteNode *wall in _walls){
             
-                if ([wall intersectsNode:acid] && !wall.hidden && [wall inParentHierarchy:self]) {
-                    acid.hidden = YES;
-                    wall.hidden = YES;
-                    [wall removeFromParent];
-                    [acid runAction:[SKAction moveTo:CGPointMake(0, -200) duration:0.001]];
+                if ([wall intersectsNode:acid] &&
+                    !wall.hidden &&
+                    [wall inParentHierarchy:self] &&
+                    [acid inParentHierarchy:self] &&
+                    !acid.hidden) {
+                    
+                    // remove animation of motion
+                    //[acid removeActionForKey:@"animationMotion"];
+                    //[acid runAction:[SKAction removeFromParent]];
+                    //[acid runAction:[SKAction fadeOutWithDuration:1]];
+                    
+                    //acid.hidden = YES;
+                    //wall.hidden = YES;
+                    //[wall runAction:[SKAction resizeToWidth:wall.size.width * 2 duration:1]];
+                    //[wall runAction:[SKAction resizeToHeight:wall.size.height * 2 duration:1]];
+                    //[wall removeFromParent];
                 }
             
             }
@@ -215,9 +230,22 @@
             if ([wall intersectsNode:viralDNA] && !wall.hidden
                 && [wall inParentHierarchy:self] && !viralDNA.hidden) {
                 viralDNA.hidden = YES;
-                wall.hidden = YES;
-                [wall removeFromParent];
-                [viralDNA runAction:[SKAction moveTo:CGPointMake(0, -200) duration:0.001]];
+                
+                //wall.hidden = YES;
+                //[wall removeFromParent];
+                
+                SKAction *wallEnds = [SKAction sequence:
+                                         @[[SKAction colorizeWithColor:[SKColor redColor] colorBlendFactor:1.0 duration:1.15],
+                                           [SKAction rotateByAngle:1 duration:2],
+                                           [SKAction resizeByWidth:30 height:30 duration:1],
+                                           //[SKAction waitForDuration:0.5],
+                                           //[SKAction colorizeWithColorBlendFactor:0.0 duration:0.15],
+                                           //[SKAction moveTo:CGPointMake(0, -200) duration:0.001],
+                                           [SKAction removeFromParent]]];
+                
+                
+                [wall runAction:wallEnds withKey:@"microbeEnds"];
+                //[wall runAction:[SKAction fadeOutWithDuration:2]];
             }
             
         }
@@ -278,7 +306,7 @@
         
         //CGVector _vectorToMoveBy = CGVectorMake(positionShootingAt.x - positionRelativeTo.physicsBody.velocity.dx, positionShootingAt.y - positionRelativeTo.physicsBody.velocity.dy);
         
-        SKAction *shootMoveAction = [SKAction moveTo:positionShootingAt duration:2];
+        SKAction *shootMoveAction = [SKAction moveTo:positionShootingAt duration:constantMovingSpeed];
         SKAction *rotateShootAction = [SKAction rotateToAngle:20 duration:2];
         
         SKAction *slowDown = [SKAction speedTo:0.1 duration:2.8];
@@ -298,7 +326,7 @@
                                                                  removeNode
                                                                  ]];
         [shoot runAction:moveLaserActionWithDone withKey:@"fired"];
-        [shoot runAction:rotateShootAction];
+        [shoot runAction:rotateShootAction withKey:@"rotate"];
         [shoot runAction:slowDown];
     }
 }
@@ -307,17 +335,15 @@
     
     SKAction *microbeEnds = [SKAction sequence:
                           @[[SKAction colorizeWithColor:[SKColor redColor] colorBlendFactor:1.0 duration:0.15],
-                            [SKAction rotateByAngle:10.0f duration:2],
+                            [SKAction rotateByAngle:1 duration:2],
                             //[SKAction waitForDuration:0.5],
                             [SKAction colorizeWithColorBlendFactor:0.0 duration:0.15],
-                            [SKAction fadeOutWithDuration:0.5],
-                            [SKAction moveTo:CGPointMake(0, -200) duration:0.001],
+                            //[SKAction moveTo:CGPointMake(0, -200) duration:0.001],
                             [SKAction removeFromParent]]];
     
     
     [nodeGotHit runAction:microbeEnds withKey:@"microbeEnds"];
-    
-    NSLog(@"shoot hit hit");
+    [nodeGotHit runAction:[SKAction fadeOutWithDuration:2]];
     
 }
 
@@ -353,6 +379,13 @@
     
     _walls = [[Level alloc] setUpWalls];
     for (SKSpriteNode *wall in _walls){
+        
+        wall.position = CGPointMake(arc4random() % (int)roundf(_sizeOfScene.width), arc4random() % (int)roundf(_sizeOfScene.height - 10));
+        
+        //[wall runAction:[SKAction resizeToWidth:wall.size.width * 1.2 duration:0.01]];
+        //[wall runAction:[SKAction resizeToHeight:wall.size.height * 1.2 duration:0.01]];
+        
+        
         [self addChild:wall];
     }
     
@@ -364,7 +397,7 @@
     
     SKAction *makeVirus = [SKAction sequence: @[
                                                 [SKAction performSelector:@selector(addVirus) onTarget:self],
-                                                [SKAction waitForDuration:1.0 withRange:0.15]
+                                                [SKAction waitForDuration:5.0 withRange:0.15]
                                                 ]];
     [self runAction: [SKAction repeatAction:makeVirus count:_totalNumberOfViruses]];
     
@@ -381,8 +414,8 @@
                                         withPictureName:@"player1"
                                           withAnimation:@"player2"
                                                withName:@"player"
-                                                andSize:(CGSizeMake(50, 50))];
-    player.color = [UIColor blackColor];
+                                                andSize:(CGSizeMake(43, 46))];
+    player.color = [UIColor greenColor];
     
     [self addChild:player];
     

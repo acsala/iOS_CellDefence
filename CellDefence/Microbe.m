@@ -35,7 +35,7 @@
                                         [NSString stringWithFormat:@"%@", animationPictureName]];
         
         SKAction *motion = [SKAction animateWithTextures:@[animationTexture1,animationTexture2] timePerFrame:.2];
-        [node runAction:[SKAction repeatActionForever:motion]];
+        [node runAction:[SKAction repeatActionForever:motion] withKey:@"animationMotion"];
         
         
     }
