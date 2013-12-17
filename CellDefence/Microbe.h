@@ -6,9 +6,9 @@
 //  Copyright (c) 2013 Attila Csala. All rights reserved.
 //
 
-#import <SpriteKit/SpriteKit.h>
+#import "Object.h"
 
-@interface Microbe : SKSpriteNode
+@interface Microbe : Object
 
 // create initialization method for microbe with position and size
 -(Microbe*) initWithPosition:(CGPoint)position

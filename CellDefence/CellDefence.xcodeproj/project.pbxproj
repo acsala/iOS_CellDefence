@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		EB2E94501857795B00D78A1E /* Wall.m in Sources */ = {isa = PBXBuildFile; fileRef = EB2E944F1857795B00D78A1E /* Wall.m */; };
+		EB2E94501857795B00D78A1E /* Cell.m in Sources */ = {isa = PBXBuildFile; fileRef = EB2E944F1857795B00D78A1E /* Cell.m */; };
 		EB46C7EE1855F94400A935AA /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EB46C7ED1855F94400A935AA /* Foundation.framework */; };
 		EB46C7F01855F94400A935AA /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EB46C7EF1855F94400A935AA /* CoreGraphics.framework */; };
 		EB46C7F21855F94400A935AA /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EB46C7F11855F94400A935AA /* UIKit.framework */; };
@@ -17,7 +17,7 @@
 		EB46C8001855F94400A935AA /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = EB46C7FF1855F94400A935AA /* AppDelegate.m */; };
 		EB46C8031855F94400A935AA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EB46C8011855F94400A935AA /* Main.storyboard */; };
 		EB46C8061855F94400A935AA /* GameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EB46C8051855F94400A935AA /* GameViewController.m */; };
-		EB46C8091855F94400A935AA /* MyScene.m in Sources */ = {isa = PBXBuildFile; fileRef = EB46C8081855F94400A935AA /* MyScene.m */; };
+		EB46C8091855F94400A935AA /* InGameScene.m in Sources */ = {isa = PBXBuildFile; fileRef = EB46C8081855F94400A935AA /* InGameScene.m */; };
 		EB46C80D1855F94400A935AA /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EB46C80C1855F94400A935AA /* Images.xcassets */; };
 		EB46C8141855F94400A935AA /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EB46C8131855F94400A935AA /* XCTest.framework */; };
 		EB46C8151855F94400A935AA /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EB46C7ED1855F94400A935AA /* Foundation.framework */; };
@@ -48,8 +48,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		EB2E944E1857795B00D78A1E /* Wall.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Wall.h; sourceTree = "<group>"; };
-		EB2E944F1857795B00D78A1E /* Wall.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Wall.m; sourceTree = "<group>"; };
+		EB2E944E1857795B00D78A1E /* Cell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Cell.h; sourceTree = "<group>"; };
+		EB2E944F1857795B00D78A1E /* Cell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Cell.m; sourceTree = "<group>"; };
 		EB46C7EA1855F94400A935AA /* CellDefence.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CellDefence.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EB46C7ED1855F94400A935AA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		EB46C7EF1855F94400A935AA /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -64,8 +64,8 @@
 		EB46C8021855F94400A935AA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		EB46C8041855F94400A935AA /* GameViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GameViewController.h; sourceTree = "<group>"; };
 		EB46C8051855F94400A935AA /* GameViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GameViewController.m; sourceTree = "<group>"; };
-		EB46C8071855F94400A935AA /* MyScene.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MyScene.h; sourceTree = "<group>"; };
-		EB46C8081855F94400A935AA /* MyScene.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MyScene.m; sourceTree = "<group>"; };
+		EB46C8071855F94400A935AA /* InGameScene.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InGameScene.h; sourceTree = "<group>"; };
+		EB46C8081855F94400A935AA /* InGameScene.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = InGameScene.m; sourceTree = "<group>"; };
 		EB46C80C1855F94400A935AA /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		EB46C8121855F94400A935AA /* CellDefenceTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CellDefenceTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		EB46C8131855F94400A935AA /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
@@ -150,8 +150,8 @@
 				EB46C8011855F94400A935AA /* Main.storyboard */,
 				EB46C8041855F94400A935AA /* GameViewController.h */,
 				EB46C8051855F94400A935AA /* GameViewController.m */,
-				EB46C8071855F94400A935AA /* MyScene.h */,
-				EB46C8081855F94400A935AA /* MyScene.m */,
+				EB46C8071855F94400A935AA /* InGameScene.h */,
+				EB46C8081855F94400A935AA /* InGameScene.m */,
 				EB46C82C185600D000A935AA /* Classes */,
 				EB46C80C1855F94400A935AA /* Images.xcassets */,
 				EB46C7F61855F94400A935AA /* Supporting Files */,
@@ -203,8 +203,8 @@
 			children = (
 				EB46C853185648DB00A935AA /* Object.h */,
 				EB46C854185648DB00A935AA /* Object.m */,
-				EB2E944E1857795B00D78A1E /* Wall.h */,
-				EB2E944F1857795B00D78A1E /* Wall.m */,
+				EB2E944E1857795B00D78A1E /* Cell.h */,
+				EB2E944F1857795B00D78A1E /* Cell.m */,
 				EB46C829185600AC00A935AA /* Microbe.h */,
 				EB46C82A185600AC00A935AA /* Microbe.m */,
 				EBD6FB80185681F700632BDE /* Level.h */,
@@ -319,8 +319,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				EB46C855185648DB00A935AA /* Object.m in Sources */,
-				EB2E94501857795B00D78A1E /* Wall.m in Sources */,
-				EB46C8091855F94400A935AA /* MyScene.m in Sources */,
+				EB2E94501857795B00D78A1E /* Cell.m in Sources */,
+				EB46C8091855F94400A935AA /* InGameScene.m in Sources */,
 				EB46C8061855F94400A935AA /* GameViewController.m in Sources */,
 				EB46C8001855F94400A935AA /* AppDelegate.m in Sources */,
 				EB46C82B185600AC00A935AA /* Microbe.m in Sources */,

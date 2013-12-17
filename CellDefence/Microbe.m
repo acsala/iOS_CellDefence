@@ -28,6 +28,7 @@
         
         node.physicsBody = [SKPhysicsBody bodyWithCircleOfRadius:node.size.height * 0.2];
         node.physicsBody.affectedByGravity = NO;
+        node.alpha = 0.6;
         
         SKTexture *animationTexture1 = [SKTexture textureWithImageNamed:
                                         [NSString stringWithFormat:@"%@", pictureName]];

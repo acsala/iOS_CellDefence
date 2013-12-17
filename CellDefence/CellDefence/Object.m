@@ -32,6 +32,7 @@
         
         node.physicsBody = [SKPhysicsBody bodyWithRectangleOfSize:CGSizeMake(node.size.width * 0.8, node.size.height * 0.8 )];
         node.physicsBody.affectedByGravity = NO;
+        node.alpha = 0.8;
         
     }
     

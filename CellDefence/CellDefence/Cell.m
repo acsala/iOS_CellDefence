@@ -6,11 +6,11 @@
 //  Copyright (c) 2013 Attila Csala. All rights reserved.
 //
 
-#import "Wall.h"
+#import "Cell.h"
 
-@implementation Wall
+@implementation Cell
 
--(Wall*)initWithPosition:(CGPoint)position
+-(Cell*)initWithPosition:(CGPoint)position
          withPictureName:(NSString*)pictureName
            withAnimation:(NSString*)animationPictureName
                 withName:(NSString*)name
@@ -27,8 +27,9 @@
         node.position = position;
         node.name  = [NSString stringWithFormat:@"%@", name];
         
-        node.physicsBody = [SKPhysicsBody bodyWithCircleOfRadius:node.size.height * 0.2];
+        node.physicsBody = [SKPhysicsBody bodyWithCircleOfRadius:node.size.height * 0.3];
         node.physicsBody.affectedByGravity = NO;
+        node.alpha = 0.8;
         
         NSLog([NSString stringWithFormat:@"%f", node.size.height]);
         

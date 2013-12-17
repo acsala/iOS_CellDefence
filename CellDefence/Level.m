@@ -9,12 +9,12 @@
 #import "Level.h"
 #import "Microbe.h"
 #import "Object.h"
-#import "Wall.h"
+#import "Cell.h"
 
-#define NUMBER_OF_VIRUSES   10
+#define NUMBER_OF_VIRUSES   5
 #define NUMBER_OF_OBJECTS   0
 #define NUMBER_OF_WALLS     30
-#define NUMBER_OF_ACIDS     10
+#define NUMBER_OF_ACIDS     3
 #define NUMBER_OF_VIRAL_DNA 10
 
 @implementation Level{
@@ -63,7 +63,7 @@
     _wallsArray = [[NSMutableArray alloc] initWithCapacity:NUMBER_OF_WALLS];
     for (int i = 0; i < NUMBER_OF_WALLS; ++i) {
         CGPoint randomLocation = CGPointMake(arc4random() % 278, arc4random() % 495);
-        Wall *wall = [[Wall alloc] initWithPosition:randomLocation
+        Cell *wall = [[Cell alloc] initWithPosition:randomLocation
                                           withPictureName:@"wall1"
                                             withAnimation:@"wall2"
                                                  withName:@"wall"
@@ -82,9 +82,10 @@
         SKSpriteNode *acid = [SKSpriteNode spriteNodeWithImageNamed:@"acid"];
         acid.hidden = YES;
         acid.size = CGSizeMake(15, 15);
-        acid.physicsBody = [SKPhysicsBody bodyWithCircleOfRadius:acid.size.width * 0.2];
+        acid.physicsBody = [SKPhysicsBody bodyWithCircleOfRadius:acid.size.width * 0.3];
         acid.physicsBody.affectedByGravity = NO;
         acid.name = @"acid";
+        acid.alpha = 0.8;
         
         [_acidsArray addObject:acid];
     }
@@ -100,9 +101,10 @@
         SKSpriteNode *viralDNA = [SKSpriteNode spriteNodeWithImageNamed:@"viralDNA"];
         viralDNA.hidden = YES;
         viralDNA.size = CGSizeMake(15, 15);
-        viralDNA.physicsBody = [SKPhysicsBody bodyWithCircleOfRadius:viralDNA.size.width * 0.2];
+        viralDNA.physicsBody = [SKPhysicsBody bodyWithCircleOfRadius:viralDNA.size.width * 0.3];
         viralDNA.physicsBody.affectedByGravity = NO;
         viralDNA.name = @"viralDNA";
+        viralDNA.alpha = 0.8;
         
         [_viralDNAArray addObject:viralDNA];
     }

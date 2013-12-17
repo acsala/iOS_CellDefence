@@ -8,9 +8,9 @@
 
 #import "Object.h"
 
-@interface Wall : Object
+@interface Cell: Object
 
--(Wall*)initWithPosition:(CGPoint)position
+-(Cell*)initWithPosition:(CGPoint)position
           withPictureName:(NSString*)pictureName
             withAnimation:(NSString*)animationPictureName
                  withName:(NSString*)name

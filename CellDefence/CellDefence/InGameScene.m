@@ -6,12 +6,12 @@
 //  Copyright (c) 2013 Attila Csala. All rights reserved.
 //
 
-#import "MyScene.h"
+#import "InGameScene.h"
 #import "Microbe.h"
 #import "Object.h"
 #import "Level.h"
 
-#define NUMBER_OF_VIRUSES   10
+#define NUMBER_OF_VIRUSES   5
 #define NUMBER_OF_OBJECTS   0
 #define NUMBER_OF_ACIDS     5
 #define PACE_OF_SPRITES     0.06f
@@ -19,27 +19,7 @@
 #define PLAYER_LIVES        3
 
 
-@implementation MyScene{
-    
-    NSMutableArray *_viruses;
-    NSMutableArray *_objects;
-    NSMutableArray *_acids;
-    NSMutableArray *_viralDNA;
-    NSMutableArray *_walls;
-    
-    SKLabelNode *_scoreLabel;
-    
-    CGSize _sizeOfScene;
-    
-    int _nextAcid;
-    int _nextViralDNA;
-    int _playerLives;
-    int _playerScore;
-    int _totalNumberOfViruses;
-    int _numberOfVirusesOnScreen;
-    int _virusRespawnCounter;
-    int _virusGotKilled;
-    
+@implementation InGameScene{
     
 }
 
@@ -82,9 +62,9 @@
     SKNode *node = [self nodeAtPoint:location];
 
     if (([node isKindOfClass:[Microbe class]] ||
-         [node isKindOfClass:[Object class]] ||
+         //[node isKindOfClass:[Object class]] ||
          [node.name isEqualToString:@"viralDNA"]) &&
-        ![node.name isEqualToString:@"player"]) {
+        ![node.name isEqualToString:@"player"]){
         
         [self shootFromArrayOfObjects:_acids
                 withNextElementCounter:_nextAcid
@@ -92,7 +72,7 @@
                 withPositionShootingAt:location
                          withVelocity:PACE_OF_ACIDS];
         _nextAcid++;
-        
+
     }
 }
 
@@ -153,7 +133,7 @@
                     
                 [self microbeGotHit:virus];
                 acid.hidden = YES;
-                _playerScore++;
+                _playerScore = _playerScore + 20;
                 _numberOfVirusesOnScreen--;
                 _virusGotKilled++;
                 [self updateDisplayWithScore:_playerScore andPLayerLives:_playerLives];
@@ -219,6 +199,7 @@
             [player runAction:[SKAction colorizeWithColor:[SKColor redColor] colorBlendFactor:1.0 duration:0.15]];
             
             if (_playerLives == 0) {
+                _gameState = ENDING;
                 [self gameEnded];
             }
             
@@ -230,9 +211,7 @@
             if ([wall intersectsNode:viralDNA] && !wall.hidden
                 && [wall inParentHierarchy:self] && !viralDNA.hidden) {
                 viralDNA.hidden = YES;
-                
-                //wall.hidden = YES;
-                //[wall removeFromParent];
+                [viralDNA removeActionForKey:@"fired"];
                 
                 SKAction *wallEnds = [SKAction sequence:
                                          @[[SKAction colorizeWithColor:[SKColor redColor] colorBlendFactor:1.0 duration:1.15],
@@ -243,8 +222,10 @@
                                            //[SKAction moveTo:CGPointMake(0, -200) duration:0.001],
                                            [SKAction removeFromParent]]];
                 
-                
                 [wall runAction:wallEnds withKey:@"microbeEnds"];
+                _playerScore = _playerScore - 10;
+                
+                [self updateDisplayWithScore:_playerScore andPLayerLives:_playerLives];
                 //[wall runAction:[SKAction fadeOutWithDuration:2]];
             }
             
@@ -278,13 +259,13 @@
     //Pick up a laser from one of your pre-made lasers.
     SKSpriteNode *shoot = [arrayOfObjects objectAtIndex:tracker];
     tracker++;
-    NSLog([NSString stringWithFormat:@"tracker: %d", tracker]);
+    //NSLog([NSString stringWithFormat:@"tracker: %d", tracker]);
     if (tracker >= arrayOfObjects.count) {
         _nextAcid = 0;
         _nextViralDNA =0;
     }
     
-    if (!positionRelativeTo.hidden) {
+    if (!positionRelativeTo.hidden && ![shoot actionForKey:@"fired"]) {
         //Set the initial position of the laser to where your ship is positioned.
         
         if (![shoot inParentHierarchy:self]) {
@@ -293,7 +274,7 @@
         
         shoot.speed = 1.0;
         shoot.hidden = NO;
-        shoot.alpha = 1.0;
+        shoot.alpha = 0.8;
         [shoot removeAllActions];
         
         shoot.position = CGPointMake(positionRelativeTo.position.x, positionRelativeTo.position.y);
@@ -355,16 +336,34 @@
     
     // add boundries so player / viruses don't get offscreen
     self.physicsBody = [SKPhysicsBody bodyWithEdgeLoopFromRect: self.frame];
-    self.backgroundColor = [SKColor colorWithRed:0.15 green:0.15 blue:0.3 alpha:1.0];
+    self.backgroundColor = [SKColor colorWithRed:0.15 green:0.15 blue:0.3 alpha:0.8];
     
-    _playerLives = PLAYER_LIVES;
-    _playerScore = 0;
-    _totalNumberOfViruses = NUMBER_OF_VIRUSES;
+    _gameState = STARTING;
+    
     _numberOfVirusesOnScreen = 0;
     _virusRespawnCounter = 0;
     _virusGotKilled = 0;
     _nextAcid = 0;
     _nextViralDNA = 0;
+    
+    if (_playerScore) {
+        
+    } else {
+        _playerScore = 0;
+    }
+    
+    if (_playerLives) {
+        
+    } else {
+        _playerLives = PLAYER_LIVES;
+    }
+    
+    if (_totalNumberOfViruses) {
+        
+    } else {
+        _totalNumberOfViruses = NUMBER_OF_VIRUSES;
+    }
+    
     
 #pragma mark - Set Up Objects
     // create array for objects
@@ -410,7 +409,7 @@
     
 #pragma mark - Set Up Player
     // create sprite for player
-    Microbe *player = [[Microbe alloc] initWithPosition:(CGPointMake(100, 100))
+    Microbe *player = [[Microbe alloc] initWithPosition:(CGPointMake(300, 300))
                                         withPictureName:@"player1"
                                           withAnimation:@"player2"
                                                withName:@"player"
@@ -423,7 +422,6 @@
     
     // initialize _scoreLabel
     _scoreLabel = [SKLabelNode labelNodeWithFontNamed:@"Arial"];
-    _scoreLabel.text = [NSString stringWithFormat:@"Score: 0 Lives: %d", _playerLives];
     _scoreLabel.fontColor = [UIColor whiteColor];
     _scoreLabel.fontSize = 24.0f;
     _scoreLabel.horizontalAlignmentMode = SKLabelHorizontalAlignmentModeLeft;
@@ -459,24 +457,31 @@
 
 -(void) gameEnded{
     
-    NSString *message = [NSString stringWithFormat:@"You scored %d this time", _playerScore];
+    NSString *message = [NSString stringWithFormat:@"Your score: %d", _playerScore];
     
-    UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Game over!"
-                                                 message:message delegate:self
-                                       cancelButtonTitle:@"New Game"
-                                       otherButtonTitles:nil];
-    
-    [av show];
+    if (_gameState == ENDING) {
+        UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Game over!"
+                                                     message:message delegate:self
+                                           cancelButtonTitle:@"New Game"
+                                           otherButtonTitles:nil];
+        [av show];
+    } else {
+        UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Next Level!"
+                                                     message:message delegate:self
+                                           cancelButtonTitle:@"Go"
+                                           otherButtonTitles:nil];
+        _gameState = PLAYING;
+        [av show];
+    }
+
 }
 
 -(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     
-    
     // when the user accepts the dialog we begin a new game
     if(buttonIndex == 0)
     {
-        
         [self newGame];
     }
     
