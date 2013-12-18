@@ -8,12 +8,20 @@
 
 #import <SpriteKit/SpriteKit.h>
 
-@interface Level : SKSpriteNode
+@interface Level : SKSpriteNode{
+    
+    NSMutableArray *_viruses;
+    NSMutableArray *_objects;
+    NSMutableArray *_acids;
+    NSMutableArray *_viralDNA;
+    NSMutableArray *_walls;
+    
+}
 
--(NSMutableArray*) setUpViruses;
+-(NSMutableArray*) setUpVirusesWithLevel:(NSInteger)Level;
 -(NSMutableArray*) setUpObjects;
 -(NSMutableArray*) setUpAcids;
 -(NSMutableArray*) setUpViralDNA;
--(NSMutableArray*) setUpWalls;
+-(NSMutableArray*) setUpCellsWithLevel:(NSInteger)Level;
 
 @end

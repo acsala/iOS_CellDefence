@@ -161,7 +161,7 @@
                 
             }
             
-            for (SKSpriteNode *wall in _walls){
+            for (SKSpriteNode *wall in _cells){
             
                 if ([wall intersectsNode:acid] &&
                     !wall.hidden &&
@@ -206,14 +206,14 @@
         }
         
         // check if viralDNA intersects wall
-        for (SKSpriteNode *wall in _walls){
+        for (SKSpriteNode *cell in _cells){
             
-            if ([wall intersectsNode:viralDNA] && !wall.hidden
-                && [wall inParentHierarchy:self] && !viralDNA.hidden) {
+            if ([cell intersectsNode:viralDNA] && !cell.hidden
+                && [cell inParentHierarchy:self] && !viralDNA.hidden) {
                 viralDNA.hidden = YES;
                 [viralDNA removeActionForKey:@"fired"];
                 
-                SKAction *wallEnds = [SKAction sequence:
+                SKAction *cellEnds = [SKAction sequence:
                                          @[[SKAction colorizeWithColor:[SKColor redColor] colorBlendFactor:1.0 duration:1.15],
                                            [SKAction rotateByAngle:1 duration:2],
                                            [SKAction resizeByWidth:30 height:30 duration:1],
@@ -222,7 +222,7 @@
                                            //[SKAction moveTo:CGPointMake(0, -200) duration:0.001],
                                            [SKAction removeFromParent]]];
                 
-                [wall runAction:wallEnds withKey:@"microbeEnds"];
+                [cell runAction:cellEnds withKey:@"microbeEnds"];
                 _playerScore = _playerScore - 10;
                 
                 [self updateDisplayWithScore:_playerScore andPLayerLives:_playerLives];
@@ -338,13 +338,25 @@
     self.physicsBody = [SKPhysicsBody bodyWithEdgeLoopFromRect: self.frame];
     self.backgroundColor = [SKColor colorWithRed:0.15 green:0.15 blue:0.3 alpha:0.8];
     
-    _gameState = STARTING;
-    
     _numberOfVirusesOnScreen = 0;
     _virusRespawnCounter = 0;
     _virusGotKilled = 0;
     _nextAcid = 0;
     _nextViralDNA = 0;
+    _totalNumberOfViruses = NUMBER_OF_VIRUSES + (_level*2);
+    
+    if (_gameState) {
+        
+    } else {
+        _gameState = STARTING;
+        [self gameStarted];
+    }
+    
+    if(_level){
+        
+    } else {
+        _level = 1;
+    }
     
     if (_playerScore) {
         
@@ -358,12 +370,6 @@
         _playerLives = PLAYER_LIVES;
     }
     
-    if (_totalNumberOfViruses) {
-        
-    } else {
-        _totalNumberOfViruses = NUMBER_OF_VIRUSES;
-    }
-    
     
 #pragma mark - Set Up Objects
     // create array for objects
@@ -374,10 +380,10 @@
         
     }
     
-#pragma mark - Set Up Walls
+#pragma mark - Set Up Cells
     
-    _walls = [[Level alloc] setUpWalls];
-    for (SKSpriteNode *wall in _walls){
+    _cells = [[Level alloc] setUpCellsWithLevel:_level];
+    for (SKSpriteNode *wall in _cells){
         
         wall.position = CGPointMake(arc4random() % (int)roundf(_sizeOfScene.width), arc4random() % (int)roundf(_sizeOfScene.height - 10));
         
@@ -392,7 +398,7 @@
     
     
     //create array for viruses
-    _viruses = [[Level alloc] setUpViruses];
+    _viruses = [[Level alloc] setUpVirusesWithLevel:_level];
     
     SKAction *makeVirus = [SKAction sequence: @[
                                                 [SKAction performSelector:@selector(addVirus) onTarget:self],
@@ -455,6 +461,18 @@
     
 }
 
+- (void) gameStarted{
+    
+    UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Cell Defence"
+                                                 message:nil delegate:self
+                                       cancelButtonTitle:@"New Game"
+                                       otherButtonTitles:@"Instructins", nil];
+    _level = 1;
+    _playerScore = 0;
+    [av show];
+    
+}
+
 -(void) gameEnded{
     
     NSString *message = [NSString stringWithFormat:@"Your score: %d", _playerScore];
@@ -463,13 +481,17 @@
         UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Game over!"
                                                      message:message delegate:self
                                            cancelButtonTitle:@"New Game"
-                                           otherButtonTitles:nil];
+                                           otherButtonTitles:@"Instructins", nil];
+        _level = 1;
+        _playerScore = 0;
         [av show];
     } else {
-        UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Next Level!"
+        
+         _level = _level + 1;
+        UIAlertView *av = [[UIAlertView alloc] initWithTitle:[NSString stringWithFormat:@"End of Level: %d", _level-1]
                                                      message:message delegate:self
-                                           cancelButtonTitle:@"Go"
-                                           otherButtonTitles:nil];
+                                           cancelButtonTitle:[NSString stringWithFormat:@"Start Level: %d", _level]
+                                           otherButtonTitles:@"Instructions", nil];
         _gameState = PLAYING;
         [av show];
     }
@@ -485,12 +507,24 @@
         [self newGame];
     }
     
+    if(buttonIndex == 1)
+    {
+        
+        NSString *instructions = [NSString stringWithFormat:@"In this game you control a cell. Your objective is to stop viruses infect other cells. Your score is decreased by every cell that is destroyed by viruses and increase by every eliminated viruses. You have to avoid being infected by viruses. "];
+        
+        UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Instructions"
+                                                     message:instructions delegate:self
+                                           cancelButtonTitle:@"Back to the Game"
+                                           otherButtonTitles:nil];
+        [av show];
+    }
+    
     
 }
 
 -(void) updateDisplayWithScore:(NSInteger)playerScore andPLayerLives:(NSInteger)playerLives{
     
-    _scoreLabel.text = [NSString stringWithFormat:@"Score: %d Lives: %d", playerScore, playerLives];
+    _scoreLabel.text = [NSString stringWithFormat:@"Score: %d Lives: %d Level: %d", playerScore, playerLives, _level];
     
 }
 

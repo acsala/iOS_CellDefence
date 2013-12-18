@@ -13,7 +13,7 @@
 
 #define NUMBER_OF_VIRUSES   5
 #define NUMBER_OF_OBJECTS   0
-#define NUMBER_OF_WALLS     30
+#define NUMBER_OF_WALLS     15
 #define NUMBER_OF_ACIDS     3
 #define NUMBER_OF_VIRAL_DNA 10
 
@@ -23,14 +23,14 @@
         NSMutableArray *_objectsArray;
         NSMutableArray *_acidsArray;
         NSMutableArray *_viralDNAArray;
-        NSMutableArray *_wallsArray;
+        NSMutableArray *_cellsArray;
 
 }
 
--(NSMutableArray*) setUpViruses{
+-(NSMutableArray*) setUpVirusesWithLevel:(NSInteger)Level{
     
-    _virusesArray = [[NSMutableArray alloc] initWithCapacity:NUMBER_OF_VIRUSES];
-    for (int i = 0; i < NUMBER_OF_VIRUSES; ++i) {
+    _virusesArray = [[NSMutableArray alloc] initWithCapacity:NUMBER_OF_VIRUSES+(Level*2)];
+    for (int i = 0; i < NUMBER_OF_VIRUSES+(Level*2); ++i) {
         Microbe *virus = [[Microbe alloc] initWithPosition:(CGPointMake(200, 200))
                                            withPictureName:@"virus1"
                                              withAnimation:@"virus2"
@@ -59,19 +59,19 @@
     return _objectsArray;
 }
 
--(NSMutableArray*) setUpWalls{
-    _wallsArray = [[NSMutableArray alloc] initWithCapacity:NUMBER_OF_WALLS];
-    for (int i = 0; i < NUMBER_OF_WALLS; ++i) {
+-(NSMutableArray*) setUpCellsWithLevel:(NSInteger)Level{
+    _cellsArray = [[NSMutableArray alloc] initWithCapacity:NUMBER_OF_WALLS+(Level*2)];
+    for (int i = 0; i < NUMBER_OF_WALLS+(Level*2); ++i) {
         CGPoint randomLocation = CGPointMake(arc4random() % 278, arc4random() % 495);
-        Cell *wall = [[Cell alloc] initWithPosition:randomLocation
+        Cell *cell = [[Cell alloc] initWithPosition:randomLocation
                                           withPictureName:@"wall1"
                                             withAnimation:@"wall2"
                                                  withName:@"wall"
                                                   andSize:(CGSizeMake(32, 29))];
         
-        [_wallsArray addObject:wall];
+        [_cellsArray addObject:cell];
     }
-    return _wallsArray;
+    return _cellsArray;
     
 }
 

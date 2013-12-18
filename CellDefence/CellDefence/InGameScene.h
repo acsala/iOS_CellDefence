@@ -20,12 +20,13 @@ typedef enum {
     NSMutableArray *_objects;
     NSMutableArray *_acids;
     NSMutableArray *_viralDNA;
-    NSMutableArray *_walls;
+    NSMutableArray *_cells;
     
     CGSize _sizeOfScene;
     
     GameState _gameState;
     
+    int _level;
     int _nextAcid;
     int _nextViralDNA;
     int _playerLives;
