@@ -11,6 +11,19 @@
 
 @implementation GameViewController
 
+// prompt the user to log in
+- (void) viewDidAppear:(BOOL)animated{
+    
+    if (![KiiUser loggedIn]) {
+        
+        // show a login viewcontroller from KiiToolkit
+        //KTLoginViewController *loginViewController = [[KTLoginViewController alloc] init];
+        //loginViewController.titleImage = [[UIImageView alloc] init];
+        //[self presentViewController:loginViewController animated:TRUE completion:nil];
+    }
+    
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -21,8 +34,9 @@
     //skView.showsNodeCount = YES;
     
     // Create and configure the scene.
-    SKScene * scene = [InGameScene sceneWithSize:skView.bounds.size];
+    InGameScene * scene = [InGameScene sceneWithSize:skView.bounds.size];
     scene.scaleMode = SKSceneScaleModeAspectFill;
+    scene.parentViewController = self;
     
     // Present the scene.
     [skView presentScene:scene];

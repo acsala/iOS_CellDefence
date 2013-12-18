@@ -14,7 +14,7 @@ typedef enum {
     PLAYING
 } GameState;
 
-@interface InGameScene: SKScene{
+@interface InGameScene: SKScene <UIAlertViewDelegate>{
     
     NSMutableArray *_viruses;
     NSMutableArray *_objects;
@@ -40,6 +40,8 @@ typedef enum {
     
 }
 
+@property (nonatomic,weak) UIViewController *parentViewController;
 
+-(void) newGame;
 
 @end

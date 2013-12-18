@@ -10,6 +10,7 @@
 #import "Microbe.h"
 #import "Object.h"
 #import "Level.h"
+#import "LeaderboardViewController.h"
 
 #define NUMBER_OF_VIRUSES   5
 #define NUMBER_OF_OBJECTS   0
@@ -30,14 +31,18 @@
         // get the actual size of the scene
         _sizeOfScene = self.scene.size;
         
-        [self newGame];
-        
     }
     return self;
 }
 
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
     /* Called when a touch begins */
+    
+    if (!_gameState == STARTING) {
+        [self newGame];
+    }
+    
+    _gameState = STARTING;
     
     // get the location of the touch
     CGPoint location = [[touches anyObject] locationInNode:self];
@@ -466,7 +471,7 @@
     UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Cell Defence"
                                                  message:nil delegate:self
                                        cancelButtonTitle:@"New Game"
-                                       otherButtonTitles:@"Instructins", nil];
+                                       otherButtonTitles:@"Instructins" ,nil];
     _level = 1;
     _playerScore = 0;
     [av show];
@@ -481,21 +486,65 @@
         UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Game over!"
                                                      message:message delegate:self
                                            cancelButtonTitle:@"New Game"
-                                           otherButtonTitles:@"Instructins", nil];
-        _level = 1;
-        _playerScore = 0;
+                                           otherButtonTitles:@"Leaderboard", nil];
+        
+        
+        [KTLoader showLoader:@"Uploading the score"];
+        
+        // KiiObject is JSON style dictionary, bucket is a container for these objects
+        KiiObject *scoreObject = [[Kii bucketWithName:@"scores"] createObject];
+        [scoreObject setObject:[NSNumber numberWithInt:_playerScore] forKey:@"scores"];
+        [scoreObject setObject:[KiiUser currentUser].username forKey:@"userName"];
+        [scoreObject saveWithBlock:^(KiiObject *object, NSError *error) {
+            
+            if (error == nil) {
+                [self showLeaderBoard];
+                
+            } else {
+                [KTLoader showLoader:@"Error Saving"
+                            animated:TRUE
+                       withIndicator:KTLoaderIndicatorSuccess
+                     andHideInterval:KTLoaderDurationAuto];
+                
+            }
+            
+        }];
+        
         [av show];
+        
+        
     } else {
         
          _level = _level + 1;
-        UIAlertView *av = [[UIAlertView alloc] initWithTitle:[NSString stringWithFormat:@"End of Level: %d", _level-1]
-                                                     message:message delegate:self
-                                           cancelButtonTitle:[NSString stringWithFormat:@"Start Level: %d", _level]
-                                           otherButtonTitles:@"Instructions", nil];
+        UIAlertView *av = [[UIAlertView alloc]
+                           initWithTitle:[NSString stringWithFormat:@"End of Level: %d", _level-1]
+                           message:[NSString stringWithFormat:@"In this game you control a cell. Your objective is to stop viruses infect other cells. Your score is decreased by every cell that is destroyed by viruses and increase by every eliminated viruses. You have to avoid being infected by viruses. "]
+                            delegate:self
+                            cancelButtonTitle:[NSString stringWithFormat:@"Start Level: %d", _level]
+                            otherButtonTitles:@"Instructions", nil];
+        
         _gameState = PLAYING;
         [av show];
     }
 
+}
+
+-(void) showLeaderBoard{
+    LeaderboardViewController *leaderBoardVC = [[LeaderboardViewController alloc] init];
+    
+    leaderBoardVC.bucket = [Kii bucketWithName:@"scores"];
+    leaderBoardVC.playerScore = _playerScore;
+    
+    KiiQuery *query = [KiiQuery queryWithClause:nil];
+    [query sortByDesc:@"scores"];
+    [query setLimit:20];
+    
+    leaderBoardVC.query = query;
+    
+    [self.parentViewController presentViewController:leaderBoardVC animated:TRUE completion:nil];
+    
+    [leaderBoardVC refreshQuery];
+    
 }
 
 -(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
@@ -504,19 +553,20 @@
     // when the user accepts the dialog we begin a new game
     if(buttonIndex == 0)
     {
+        if (_gameState == ENDING) {
+            // reset the score here
+            _level = 1;
+            _playerScore = 0;
+        }
+        _gameState = PLAYING;
+        
         [self newGame];
     }
     
-    if(buttonIndex == 1)
-    {
+    if(buttonIndex == 1){
         
-        NSString *instructions = [NSString stringWithFormat:@"In this game you control a cell. Your objective is to stop viruses infect other cells. Your score is decreased by every cell that is destroyed by viruses and increase by every eliminated viruses. You have to avoid being infected by viruses. "];
+        [self showLeaderBoard];
         
-        UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Instructions"
-                                                     message:instructions delegate:self
-                                           cancelButtonTitle:@"Back to the Game"
-                                           otherButtonTitles:nil];
-        [av show];
     }
     
     
