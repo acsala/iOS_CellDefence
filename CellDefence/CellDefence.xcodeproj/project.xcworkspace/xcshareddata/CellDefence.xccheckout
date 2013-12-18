@@ -12,6 +12,8 @@
 	<dict>
 		<key>454B9CF3-E88A-4F2C-966B-5D931CE3620C</key>
 		<string>https://github.com/01000001/iOS_CellDefence</string>
+		<key>90A70C2C-573E-4C6F-A787-B63945B705B9</key>
+		<string>https://github.com/KiiPlatform/KiiToolkit-iOS</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
 	<string>CellDefence/CellDefence.xcodeproj/project.xcworkspace</string>
@@ -19,6 +21,8 @@
 	<dict>
 		<key>454B9CF3-E88A-4F2C-966B-5D931CE3620C</key>
 		<string>../../..</string>
+		<key>90A70C2C-573E-4C6F-A787-B63945B705B9</key>
+		<string>../../KiiToolkit-iOS</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
 	<string>https://github.com/01000001/iOS_CellDefence</string>
@@ -35,6 +39,14 @@
 			<string>454B9CF3-E88A-4F2C-966B-5D931CE3620C</string>
 			<key>IDESourceControlWCCName</key>
 			<string>iOS_CellDefence</string>
+		</dict>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>90A70C2C-573E-4C6F-A787-B63945B705B9</string>
+			<key>IDESourceControlWCCName</key>
+			<string>KiiToolkit-iOS</string>
 		</dict>
 	</array>
 </dict>

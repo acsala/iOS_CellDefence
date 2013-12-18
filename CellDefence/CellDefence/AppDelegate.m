@@ -13,6 +13,14 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     // Override point for customization after application launch.
+
+    // Initialize the Kii SDK!
+    [Kii beginWithID:@"f03eaaa8"
+              andKey:@"2e21505b0c514e96cb239edd98a09459"
+             andSite:kiiSiteUS];
+    
+    // import Kii framework, add frameworks that Kii depends on: MobileCore, Accounts, Twitter and add KiiToolkit
+    
     return YES;
 }
 							
