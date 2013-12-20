@@ -23,8 +23,8 @@ List of features:
 Technologies implemented:
 <ul><i>
 <li>iOS 7, XCode 5</li>
-<li>SpriteKit</li>
-<li>KiiCloud</li>
+<li>iOS additional frameworks: Kii framework, MobileCore, Accounts, Twitter and KiiToolkit, SpriteKit</li>
+<li>scoreboard in the cloud is implemented via KiiCloud</li>
 </ul>
 
 Mockup:
