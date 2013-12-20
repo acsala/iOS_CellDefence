@@ -9,7 +9,7 @@ but the game ends if the immune cell is corrupted.
 
 List of features:
 <ul><i>
-<li>player has to log in to use the game (no email address is neaded)</li>
+<li>player has to register and log in to use the game (no email address is neaded)</li>
 <li>user has to control an unite of immune cell by tapping on the screen</li>
 <li>user has to try to destroy the viruses by firing on them</li>
 <li>viruses move around the screen and trying to insert their viral DNA into cells</li>
