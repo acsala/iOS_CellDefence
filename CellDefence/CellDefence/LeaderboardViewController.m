@@ -50,7 +50,7 @@
     scoreLabel.font = [UIFont boldSystemFontOfSize:18.0f];
     scoreLabel.textColor = [UIColor whiteColor];
     scoreLabel.textAlignment = NSTextAlignmentCenter;
-    scoreLabel.text = [NSString stringWithFormat:@"Your score: %d", _playerScore];
+    scoreLabel.text = [NSString stringWithFormat:@"Game Over! Your score: %d", _playerScore];
     [header addSubview:scoreLabel];
     
     return header;

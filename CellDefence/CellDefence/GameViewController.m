@@ -11,15 +11,29 @@
 
 @implementation GameViewController
 
+- (void) viewWillAppear:(BOOL)animated{
+    
+}
+
 // prompt the user to log in
 - (void) viewDidAppear:(BOOL)animated{
-    
+
     if (![KiiUser loggedIn]) {
         
-        // show a login viewcontroller from KiiToolkit
-        //KTLoginViewController *loginViewController = [[KTLoginViewController alloc] init];
-        //loginViewController.titleImage = [[UIImageView alloc] init];
-        //[self presentViewController:loginViewController animated:TRUE completion:nil];
+        //show a login viewcontroller from KiiToolkit
+        KTLoginViewController *loginViewController = [[KTLoginViewController alloc] init];
+        
+        loginViewController.titleImage.image = [UIImage imageNamed:@"player1"];
+        
+        KTRegistrationViewController *registrationView = loginViewController.registrationView;
+        
+        registrationView.titleImage.image = [UIImage imageNamed:@"player1"];
+        
+        KTForgotPasswordViewController *forgotView = loginViewController.forgotPasswordView;
+        
+        forgotView.titleImage.image = [UIImage imageNamed:@"player1"];
+        
+        [self presentViewController:loginViewController animated:TRUE completion:nil];
     }
     
 }

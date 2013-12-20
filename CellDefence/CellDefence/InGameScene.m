@@ -17,7 +17,7 @@
 #define NUMBER_OF_ACIDS     5
 #define PACE_OF_SPRITES     0.06f
 #define PACE_OF_ACIDS       0.01f
-#define PLAYER_LIVES        3
+#define PLAYER_LIVES        1
 
 
 @implementation InGameScene{
@@ -31,6 +31,8 @@
         // get the actual size of the scene
         _sizeOfScene = self.scene.size;
         
+        [self gameStarted];
+        
     }
     return self;
 }
@@ -43,6 +45,7 @@
     }
     
     _gameState = STARTING;
+    [self updateDisplayWithScore:_playerScore andPLayerLives:_playerLives];
     
     // get the location of the touch
     CGPoint location = [[touches anyObject] locationInNode:self];
@@ -69,7 +72,8 @@
     if (([node isKindOfClass:[Microbe class]] ||
          //[node isKindOfClass:[Object class]] ||
          [node.name isEqualToString:@"viralDNA"]) &&
-        ![node.name isEqualToString:@"player"]){
+        ![node.name isEqualToString:@"player"]
+        ){
         
         [self shootFromArrayOfObjects:_acids
                 withNextElementCounter:_nextAcid
@@ -270,7 +274,9 @@
         _nextViralDNA =0;
     }
     
-    if (!positionRelativeTo.hidden && ![shoot actionForKey:@"fired"]) {
+    if (!positionRelativeTo.hidden
+        //&& ![shoot actionForKey:@"fired"]
+        ) {
         //Set the initial position of the laser to where your ship is positioned.
         
         if (![shoot inParentHierarchy:self]) {
@@ -407,7 +413,7 @@
     
     SKAction *makeVirus = [SKAction sequence: @[
                                                 [SKAction performSelector:@selector(addVirus) onTarget:self],
-                                                [SKAction waitForDuration:5.0 withRange:0.15]
+                                                [SKAction waitForDuration:5.0 withRange:3.15]
                                                 ]];
     [self runAction: [SKAction repeatAction:makeVirus count:_totalNumberOfViruses]];
     
@@ -420,7 +426,7 @@
     
 #pragma mark - Set Up Player
     // create sprite for player
-    Microbe *player = [[Microbe alloc] initWithPosition:(CGPointMake(300, 300))
+    Microbe *player = [[Microbe alloc] initWithPosition:(CGPointMake(100, 50))
                                         withPictureName:@"player1"
                                           withAnimation:@"player2"
                                                withName:@"player"
@@ -469,11 +475,13 @@
 - (void) gameStarted{
     
     UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Cell Defence"
-                                                 message:nil delegate:self
+                                                 message:@"In this game you control a cell. Your objective is to stop viruses infect other cells. Your score is decreased by every cell that is destroyed by viruses and increase by every eliminated viruses. You have to avoid being infected by viruses."
+                                                delegate:self
                                        cancelButtonTitle:@"New Game"
-                                       otherButtonTitles:@"Instructins" ,nil];
+                                       otherButtonTitles:nil];
     _level = 1;
     _playerScore = 0;
+    _playerLives = PLAYER_LIVES;
     [av show];
     
 }
@@ -483,34 +491,15 @@
     NSString *message = [NSString stringWithFormat:@"Your score: %d", _playerScore];
     
     if (_gameState == ENDING) {
+        
+        [self updateScoreInCloud];
+        
         UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Game over!"
                                                      message:message delegate:self
                                            cancelButtonTitle:@"New Game"
                                            otherButtonTitles:@"Leaderboard", nil];
         
-        
-        [KTLoader showLoader:@"Uploading the score"];
-        
-        // KiiObject is JSON style dictionary, bucket is a container for these objects
-        KiiObject *scoreObject = [[Kii bucketWithName:@"scores"] createObject];
-        [scoreObject setObject:[NSNumber numberWithInt:_playerScore] forKey:@"scores"];
-        [scoreObject setObject:[KiiUser currentUser].username forKey:@"userName"];
-        [scoreObject saveWithBlock:^(KiiObject *object, NSError *error) {
-            
-            if (error == nil) {
-                [self showLeaderBoard];
-                
-            } else {
-                [KTLoader showLoader:@"Error Saving"
-                            animated:TRUE
-                       withIndicator:KTLoaderIndicatorSuccess
-                     andHideInterval:KTLoaderDurationAuto];
-                
-            }
-            
-        }];
-        
-        [av show];
+        //[av show];
         
         
     } else {
@@ -518,10 +507,10 @@
          _level = _level + 1;
         UIAlertView *av = [[UIAlertView alloc]
                            initWithTitle:[NSString stringWithFormat:@"End of Level: %d", _level-1]
-                           message:[NSString stringWithFormat:@"In this game you control a cell. Your objective is to stop viruses infect other cells. Your score is decreased by every cell that is destroyed by viruses and increase by every eliminated viruses. You have to avoid being infected by viruses. "]
+                           message:[NSString stringWithFormat:@""]
                             delegate:self
                             cancelButtonTitle:[NSString stringWithFormat:@"Start Level: %d", _level]
-                            otherButtonTitles:@"Instructions", nil];
+                            otherButtonTitles:nil];
         
         _gameState = PLAYING;
         [av show];
@@ -575,6 +564,30 @@
 -(void) updateDisplayWithScore:(NSInteger)playerScore andPLayerLives:(NSInteger)playerLives{
     
     _scoreLabel.text = [NSString stringWithFormat:@"Score: %d Lives: %d Level: %d", playerScore, playerLives, _level];
+    
+}
+
+-(void) updateScoreInCloud{
+    
+    // KiiObject is JSON style dictionary, bucket is a container for these objects
+    KiiObject *scoreObject = [[Kii bucketWithName:@"scores"] createObject];
+    [scoreObject setObject:[NSNumber numberWithInt:_playerScore] forKey:@"scores"];
+    [scoreObject setObject:[KiiUser currentUser].username forKey:@"userName"];
+    //[KTLoader showLoader:@"Uploading the score"];
+    [scoreObject saveWithBlock:^(KiiObject *object, NSError *error) {
+        
+        if (error == nil) {
+            [self showLeaderBoard];
+            
+        } else {
+            [KTLoader showLoader:@"Error Saving"
+                        animated:TRUE
+                   withIndicator:KTLoaderIndicatorSuccess
+                 andHideInterval:KTLoaderDurationAuto];
+            
+        }
+        
+    }];
     
 }
 
