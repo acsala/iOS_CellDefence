@@ -1,3 +1,35 @@
+iOS_CellDefence
+===============
+
+The player, controlling an immune cell, must engulf infester viruses (by shooting acid at them),
+which enter the playfield from the top of the screen. The viruses attempt to insert their DNA into
+the cell in the organism. The viruses can destroy the immune cell as well.
+A level is completed when the player destroys all viruses,
+but the game ends if the immune cell is corrupted.
+
+List of features:
+<ul><i>
+<li>player has to log in to use the game (no email address is neaded)</li>
+<li>user has to control an unite of immune cell by tapping on the screen</li>
+<li>user has to try to destroy the viruses by firing on them</li>
+<li>viruses move around the screen and trying to insert their viral DNA into cells</li>
+<li>user loses life if a virus hits the lysosome</li>
+<li>player scores by destroying viruses</li>
+<li>player lose score if virus destroys a cell</li>
+<li>in the end of the game, high score is available</li>
+<li>high score is implemented in the cloud, player can compete with other players</li>
+</ul>
+
+Technologies implemented:
+<ul><i>
+<li>iOS 7, XCode 5</li>
+<li>SpriteKit</li>
+<li>KiiCloud</li>
+</ul>
+
+Mockup:
+<img src="/image.jpg" alt="Mockup">
+
 Design document of Hangman
 =============
 
@@ -14,18 +46,17 @@ The app has to implement all the features that the player could encounter during
 <br>About the game:
 The player, controlling a lysosome, must engulf infester viruses (by shooting at them),
 which enter the playfield from the top of the screen.
-The viruses attempt to insert their DNA into the cell's nucleus (represented on the bottom of the map).
-The viruses can destroy the lysosome as well. A level is completed when the player destroys all viruses,
-but the game ends if the nucleus is corrupted or the player loses all available lives.
+The viruses attempt to insert their DNA into other cells.
+The viruses can destroy the lysosome as well. A level is completed when the player destroys all viruses.
 
 # Section 2 – List of database tables and fields
 
-No databases are going to be implemented, scores and settings are going to be stored in dictonaries.
+No databases are going to be implemented, scores and settings are going to be stored in the cloud via KiiCloud.
     
 # Section 3 – A list of models and actions
 
-The view of the game is going to be built in a storyboard. Three storiboards are plant to be implemented;
-one for the main menu, one for the settings, and one for the gameplay. The lysosome, controlled by the player,
+The view of the game is going to be built in a storyboard. Two viewcontrollers are plant to be implemented;
+one for the leaderboard, and one for the gameplay. The lysosome, controlled by the player,
 and the viruses will have similar properties, they will be able to move around a map in vertical and
 horizontal directions, able to shoot at other objects, and can be destroyed by other objects by got hit.
 Therefor these attributes are going to implemented in a separate model. Futhermore the attributes of the map will be
@@ -33,41 +64,25 @@ placed in a model. These models will communicate with the view through viewcontr
 
 <ul>
 <li>Storyboard</li>
-<li>MainViewController</li>
 <li>GameViewController</li>
-<li>SettingViewController</li>
-<li>MyScreen</li>
-<li>GamePLay</li>
+<li>LeaderboardViewController</li>
+<li>InGameScreen</li>
 <li>Microbe</li>
 <li>Level</li>
 <li>Object</li>
-</ul>
-
-Sotryboard
-<ul>
-<li>Contains the view for main menu, settings and gameplay</li>
-</ul>
-
-MainViewController
-<ul>
-<li>View controller for main menu, segue to settings and gameplay</li>
+<li>Cell</li>
 </ul>
 
 GameViewController
 <ul>
-<li>Envokes MyScreen, which is a Sprite Kit class, methodes for starting a game</li>
+<li>View controller for main menu, gameplay will be embedded here. DidLoad envokes the login screen where a player can log in so the highscores can be updated accordingly.</li>
 </ul>
 
-MyScreen
+InGameScreen
 <ul>
-<li>Sprite Kit class, it will make properties of models Microbe and Level as sprites, take care of the physics and animation
-of the game</li>
+<li>Sprite Kit class, it will make properties of models Microbe and Level as sprites, take care of the physics and animation of the game plus the gameplay logic will be placed here as well</li>
 </ul>
 
-GamePlay
-<ul>
-<li>Class for GamePlay, has methodes to start a new game, keeping track of the score, logic for ending the game</li>
-</ul>
 
 Microbe
 <ul>
@@ -79,9 +94,9 @@ Level
 <li>Class for Levels, represents the map on methodes in it to build up a level from objects</li>
 </ul>
 
-Object
+Cell
 <ul>
-<li>Class for Objects that can be placed on the map</li>
+<li>Class for cells that can be placed on the map, the player has to protect these cells from the viruses</li>
 </ul>
 
 # Style guide
